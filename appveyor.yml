@@ -1,0 +1,36 @@
+version: 1.0.{build}
+image: Visual Studio 2019
+
+configuration:
+  - Debug
+  - Release
+
+platform:
+  - Win32
+  - x64
+
+environment:
+  PATH: $(PATH);C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\msys64\opt\bin
+  MPCHC_MSYS: C:\MSYS64
+  MPCHC_MINGW32: C:\MSYS64\mingw32
+  MPCHC_MINGW64: C:\MSYS64\mingw64
+  MSYSTEM: MINGW32
+  MSYS2_PATH_TYPE: inherit
+  MPCHC_GIT: C:\Program Files\Git
+  MPCHC_PYTHON: C:\Python38-x64
+
+clone_script:
+  - git clone -q --recursive --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
+  - git checkout -qf %APPVEYOR_REPO_COMMIT%
+
+install:
+  - pacman -S --noconfirm --needed nasm yasm
+
+build_script:
+  - update_version.bat
+  - msbuild mpc-hc.sln -t:build -restore -p:Configuration="%CONFIGURATION%" -p:Platform="%PLATFORM%"
+  - cd bin
+  - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do 7z a "%APPVEYOR_BUILD_FOLDER%\mpc-hc_%PLATFORM%_%CONFIGURATION%.7z" "%%d\*" "%APPVEYOR_BUILD_FOLDER%\distrib\%PLATFORM:Win32=x86%\D3D*.dll"
+
+artifacts:
+  - path: mpc-hc_*.7z
