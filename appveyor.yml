@@ -6,8 +6,8 @@ configuration:
   - Release
 
 platform:
-  - Win32
   - x64
+  - Win32
 
 environment:
   PATH: $(PATH);C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\msys64\opt\bin
