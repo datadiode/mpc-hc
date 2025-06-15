@@ -52,6 +52,16 @@ void CMPCThemePlayerBar::paintHideButton(CDC* pDC, CSCBButton b) //derived from 
 
     auto& dpi = m_pMainFrame->m_dpi;
 
+    switch (m_nDockBarID)
+    {
+    case AFX_IDW_DOCKBAR_LEFT:
+    case AFX_IDW_DOCKBAR_RIGHT:
+        if (GetExStyle() & WS_EX_LAYOUTRTL) {
+            rc.OffsetRect(rc.top - rc.left + 1, 0);
+        }
+        break;
+    }
+
     CMPCThemeUtil::drawToolbarHideButton(pDC, this, rc, CMPCThemeUtil::getIconPathByDPI(m_pMainFrame, TOOLBAR_HIDE_ICON), dpi.ScaleFactorX(), true, b.bPushed||b.bRaised);
 }
 
