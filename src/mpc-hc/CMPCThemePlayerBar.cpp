@@ -40,31 +40,6 @@ BOOL CMPCThemePlayerBar::OnEraseBkgnd(CDC* pDC)
     }
 }
 
-void CMPCThemePlayerBar::paintHideButton(CDC* pDC, CSCBButton b) //derived from CSCBButton::Paint
-{
-    CRect rc = b.GetRect();
-
-    if (b.bPushed) {
-        pDC->FillSolidRect(rc, CMPCTheme::ClosePushColor);
-    } else if (b.bRaised) {
-        pDC->FillSolidRect(rc, CMPCTheme::CloseHoverColor);
-    }
-
-    auto& dpi = m_pMainFrame->m_dpi;
-
-    switch (m_nDockBarID)
-    {
-    case AFX_IDW_DOCKBAR_LEFT:
-    case AFX_IDW_DOCKBAR_RIGHT:
-        if (GetExStyle() & WS_EX_LAYOUTRTL) {
-            rc.OffsetRect(rc.top - rc.left + 1, 0);
-        }
-        break;
-    }
-
-    CMPCThemeUtil::drawToolbarHideButton(pDC, this, rc, CMPCThemeUtil::getIconPathByDPI(m_pMainFrame, TOOLBAR_HIDE_ICON), dpi.ScaleFactorX(), true, b.bPushed||b.bRaised);
-}
-
 void CMPCThemePlayerBar::NcCalcClient(LPRECT pRc, UINT nDockBarID) { //derived from CSizingControlBarG::NcCalcClient to support DPI changes
     CRect rcBar(pRc); // save the bar rect
 
@@ -135,7 +110,25 @@ void CMPCThemePlayerBar::NcPaintGripper(CDC* pDC, CRect rcClient)   //derived fr
     }
     CMPCThemeUtil::drawGripper(this, m_pMainFrame, gripper, pDC, bHorz);
 
-    paintHideButton(pDC, m_biHide);
+    if (m_biHide.bPushed) {
+        pDC->FillSolidRect(rcbtn, CMPCTheme::ClosePushColor);
+    } else if (m_biHide.bRaised) {
+        pDC->FillSolidRect(rcbtn, CMPCTheme::CloseHoverColor);
+    }
+
+    auto& dpi = m_pMainFrame->m_dpi;
+
+    if (GetExStyle() & WS_EX_LAYOUTRTL) {
+        if (IsHorzDocked()) {
+            rcbtn.OffsetRect(gripper.Width() + 4 - rcbtn.Width(), 0);
+        } else {
+            rcbtn.OffsetRect(-3 - gripper.Width(), 0);
+        }
+    }
+
+    CMPCThemeUtil::drawToolbarHideButton(pDC, this, rcbtn,
+        CMPCThemeUtil::getIconPathByDPI(m_pMainFrame, TOOLBAR_HIDE_ICON),
+        dpi.ScaleFactorX(), true, m_biHide.bPushed || m_biHide.bRaised);
 }
 
 void CMPCThemePlayerBar::mpc_fillNcBG(CDC* mdc, CRect rcDraw)
