@@ -99,7 +99,7 @@ void DpiHelper::Override(int dpix, int dpiy)
 
 int DpiHelper::GetSystemMetricsDPI(int nIndex) {
     if (IsWindows10OrGreater()) {
-        static const WinapiFunc<decltype(GetSystemMetricsForDpi)>
+        static const WinapiFunc<decltype(Winapi::GetSystemMetricsForDpi)>
         fnGetSystemMetricsForDpi = { L"user32.dll", "GetSystemMetricsForDpi" };
 
         //static tpGetSystemMetricsForDpi pGetSystemMetricsForDpi = (tpGetSystemMetricsForDpi)GetProcAddress(GetModuleHandleW(L"user32.dll"), "GetSystemMetricsForDpi");
@@ -123,7 +123,7 @@ void DpiHelper::GetMessageFont(LOGFONT* lf) {
 }
 
 bool DpiHelper::GetNonClientMetrics(PNONCLIENTMETRICSW ncm, bool& dpiCorrected) {
-    const WinapiFunc<decltype(SystemParametersInfoForDpi)>
+    const WinapiFunc<decltype(Winapi::SystemParametersInfoForDpi)>
         fnSystemParametersInfoForDpi = { L"user32.dll", "SystemParametersInfoForDpi" };
 
     ZeroMemory(ncm, sizeof(NONCLIENTMETRICS));
