@@ -73,8 +73,7 @@ BOOL CPlayerPlaylistBar::Create(CWnd* pParentWnd, UINT defDockBarID)
         return FALSE;
     }
 
-    m_list.CreateEx(
-        WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE,
+    m_list.Create(
         WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_TABSTOP
         | LVS_OWNERDRAWFIXED
         | LVS_NOCOLUMNHEADER
@@ -82,7 +81,7 @@ BOOL CPlayerPlaylistBar::Create(CWnd* pParentWnd, UINT defDockBarID)
         | LVS_REPORT | LVS_SINGLESEL | LVS_AUTOARRANGE | LVS_NOSORTHEADER, // TODO: remove LVS_SINGLESEL and implement multiple item repositioning (dragging is ready)
         CRect(0, 0, 100, 100), this, IDC_PLAYLIST);
 
-    m_list.SetExtendedStyle(m_list.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER);
+    m_list.SetExtendedStyle(m_list.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER | LVS_EX_GRIDLINES);
 
     // The column titles don't have to be translated since they aren't displayed anyway
     m_list.InsertColumn(COL_NAME, _T("Name"), LVCFMT_LEFT);
@@ -96,9 +95,69 @@ BOOL CPlayerPlaylistBar::Create(CWnd* pParentWnd, UINT defDockBarID)
 
     m_dropTarget.Register(this);
 
+    m_marker.Create(nullptr, SS_OWNERDRAW | WS_VISIBLE | WS_DISABLED, CRect(0, 0, 12, 12), this, IDC_PLAYLIST);
+    m_marker.SetWindowRgn(CreateEllipticRgn(0, 0, 12, 12), TRUE);
+
 	createdWindow = true;
 
     return TRUE;
+}
+
+HRESULT CPlayerPlaylistBar::OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment)
+{
+    m_webViewEnvironment = environment;
+    m_webViewEnvironment->CreateCoreWebView2Controller(this->GetSafeHwnd(), Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(this, &CPlayerPlaylistBar::OnCreateCoreWebView2ControllerCompleted).Get());
+
+    return S_OK;
+}
+
+#include <wrl.h>
+#include <wil/com.h>
+using namespace Microsoft::WRL;
+
+#define HEREDOC(text) L#text
+
+HRESULT CPlayerPlaylistBar::OnCreateCoreWebView2ControllerCompleted(HRESULT result, ICoreWebView2Controller* controller)
+{
+    if (result == S_OK)
+    {
+        m_controller = controller;
+        Microsoft::WRL::ComPtr<ICoreWebView2> coreWebView2;
+        m_controller->get_CoreWebView2(&coreWebView2);
+        m_webView = coreWebView2.Get();
+
+        if (!m_webView)
+            return S_FALSE;
+
+        // https://wiki.openstreetmap.org/wiki/OpenLayers_Marker_Example
+
+        m_webView->Navigate(L"https://www.openstreetmap.org");
+
+        /*m_webView->add_NavigationCompleted(Callback<ICoreWebView2NavigationCompletedEventHandler>(
+            [](ICoreWebView2* webview, ICoreWebView2NavigationCompletedEventArgs* args) -> HRESULT
+            {
+                webview->ExecuteScript(
+                    HEREDOC
+                    (
+                        var button = document.createElement('button');
+                        button.style = "position:relative;left=50px";
+                        document.body.insertAdjacentElement("afterbegin", button);
+                    ),
+                    Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
+                    [](HRESULT errorCode, LPCWSTR resultObjectAsJson) -> HRESULT
+                    {
+                        return S_OK;
+                    }).Get());
+                return S_OK;
+            }).Get(), &m_tokenNavigationCompleted);*/
+
+        ResizeListColumn();
+    }
+    else
+    {
+        TRACE("Failed to create webview");
+    }
+    return S_OK;
 }
 
 BOOL CPlayerPlaylistBar::PreCreateWindow(CREATESTRUCT& cs)
@@ -126,6 +185,28 @@ BOOL CPlayerPlaylistBar::PreTranslateMessage(MSG* pMsg)
     }
 
     return __super::PreTranslateMessage(pMsg);
+}
+
+void CPlayerPlaylistBar::InitializeWebView()
+{
+    WCHAR userDataFolder[MAX_PATH];
+    SHGetFolderPathW(nullptr, CSIDL_LOCAL_APPDATA, nullptr, SHGFP_TYPE_CURRENT, userDataFolder);
+    auto options = Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>();
+    options->put_AllowSingleSignOnUsingOSPrimaryAccount(FALSE);
+
+    HRESULT hr = CreateCoreWebView2EnvironmentWithOptions(nullptr, userDataFolder, options.Get(), Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this, &CPlayerPlaylistBar::OnCreateEnvironmentCompleted).Get());
+
+    if (!SUCCEEDED(hr))
+    {
+        if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            TRACE("Couldn't find Edge installation. Do you have a version installed that is compatible with this ");
+        }
+        else
+        {
+            AfxMessageBox(L"Failed to create webview environment");
+        }
+    }
 }
 
 void CPlayerPlaylistBar::ReloadTranslatableResources()
@@ -169,7 +250,18 @@ void CPlayerPlaylistBar::SetHiddenDueToFullscreen(bool bHiddenDueToFullscreen, b
     m_bHiddenDueToFullscreen = bHiddenDueToFullscreen;
 }
 
-void CPlayerPlaylistBar::LoadDuration(POSITION pos) {
+void CPlayerPlaylistBar::Navigate(const GpsRecord& rec)
+{
+    CString url;
+    //url.Format(L"https://www.openstreetmap.org/?mlat=%f&mlon=%f&zoom=16", rec.Latitude, rec.Longitude, rec.Latitude, rec.Longitude);
+    url.Format(L"https://www.openstreetmap.org/#map=16/%f/%f", rec.Latitude, rec.Longitude, rec.Latitude, rec.Longitude);
+    if (m_url != url) {
+        m_webView->Navigate(m_url = url);
+    }
+}
+
+void CPlayerPlaylistBar::LoadDuration(POSITION pos)
+{
     if (AfxGetAppSettings().bUseMediainfoLoadFileDuration) {
 
         CPlaylistItem& pli = m_pl.GetAt(pos);
@@ -1749,7 +1841,7 @@ void CPlayerPlaylistBar::ResizeListColumn()
     if (::IsWindow(m_list.m_hWnd)) {
         CRect r;
         GetClientRect(r);
-        r.DeflateRect(2, 2);
+        r.top = r.right + 3;
 
         m_list.SetRedraw(FALSE);
         m_list.SetColumnWidth(COL_NAME, 0);
@@ -1765,6 +1857,18 @@ void CPlayerPlaylistBar::ResizeListColumn()
         Invalidate();
         m_list.updateSB();
         m_list.RedrawWindow(nullptr, nullptr, RDW_FRAME | RDW_INVALIDATE);
+
+        GetClientRect(r);
+        r.bottom = r.right;
+        if (m_controller)
+        {
+            m_controller->put_Bounds(r);
+            m_marker.SetWindowPos(nullptr, r.right / 2 - 6, r.bottom / 2 - 6, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+        }
+        else if (!r.IsRectEmpty())
+        {
+            InitializeWebView();
+        }
     }
 }
 
@@ -1853,7 +1957,7 @@ void CPlayerPlaylistBar::OnNMDblclkList(NMHDR* pNMHDR, LRESULT* pResult)
 void CPlayerPlaylistBar::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 {
     __super::OnMeasureItem(nIDCtl, lpMeasureItemStruct);
-    lpMeasureItemStruct->itemHeight = m_pMainFrame->m_dpi.CalculateListCtrlItemHeight((CListCtrl*)&m_list);
+    lpMeasureItemStruct->itemHeight = m_pMainFrame->m_dpi.CalculateListCtrlItemHeight(&m_list);
 #if 0
     if (createdWindow) {
         //after creation, measureitem is called once for every window resize.  we will cache the default height before DPI scaling
@@ -1915,6 +2019,11 @@ void CPlayerPlaylistBar::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 void CPlayerPlaylistBar::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
     if (nIDCtl != IDC_PLAYLIST) {
+        return;
+    }
+
+    if (lpDrawItemStruct->CtlType == ODT_STATIC) {
+        CDC::FromHandle(lpDrawItemStruct->hDC)->FillSolidRect(&lpDrawItemStruct->rcItem, RGB(255, 0, 0));
         return;
     }
 
