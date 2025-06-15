@@ -18,14 +18,17 @@ else
 fi
 
 if [ "${2}" == "Debug" ]; then
+  conf=Debug
   FFMPEG_DLL_PATH=$(readlink -f ../../..)/bin/${mpc_hc_folder}_Debug/${lav_folder}
   BASEDIR=$(pwd)/src/bin_${archdir}d
   cross_prefix=
   COMPILER=MSVC
 else
+  conf=Release
   FFMPEG_DLL_PATH=$(readlink -f ../../..)/bin/${mpc_hc_folder}/${lav_folder}
   BASEDIR=$(pwd)/src/bin_${archdir}
-  COMPILER=GCC
+  cross_prefix=
+  COMPILER=MSVC
 fi
 
 THIRDPARTYPREFIX=${BASEDIR}/thirdparty
@@ -119,10 +122,14 @@ configure() {
   if [ "${arch}" == "x86_64" ]; then
     export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:../../../thirdparty/64/lib/pkgconfig/"
     if [ "${COMPILER}" == "MSVC" ]; then
-      OPTIONS="${OPTIONS} --enable-debug"
       EXTRA_CFLAGS="-D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -Zo -GS-"
-      EXTRA_CFLAGS="${EXTRA_CFLAGS} -I../../../thirdparty/64/include -I../../../../../zlib -I../../../../msvcInclude -MDd"
-      EXTRA_LDFLAGS="${EXTRA_LDFLAGS} -LIBPATH:../../../thirdparty/64/lib -LIBPATH:../../../../../../../bin/lib/Debug_x64 -NODEFAULTLIB:libcmt"
+      EXTRA_CFLAGS="${EXTRA_CFLAGS} -I../../../thirdparty/64/include -I../../../../../zlib -I../../../../msvcInclude -MD"
+      if [ "${conf}" == "Debug" ]; then
+        EXTRA_CFLAGS="${EXTRA_CFLAGS}d"
+      else
+        OPTIONS="${OPTIONS} --disable-debug"
+      fi
+      EXTRA_LDFLAGS="${EXTRA_LDFLAGS} -LIBPATH:../../../thirdparty/64/lib -LIBPATH:../../../../../../../bin/lib/${conf}_x64 -NODEFAULTLIB:libcmt"
       TOOLCHAIN="--toolchain=msvc"
     else
       OPTIONS="${OPTIONS} --enable-cross-compile --cross-prefix=${cross_prefix} --target-os=mingw32 --pkg-config=pkg-config"
@@ -134,10 +141,14 @@ configure() {
   else
     export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:../../../thirdparty/32/lib/pkgconfig/"
     if [ "${COMPILER}" == "MSVC" ]; then
-      OPTIONS="${OPTIONS} --enable-debug"
       EXTRA_CFLAGS="-D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -Zo -GS-"
-      EXTRA_CFLAGS="${EXTRA_CFLAGS} -I../../../thirdparty/32/include -I../../../../../zlib -I../../../../msvcInclude -MDd"
-      EXTRA_LDFLAGS="${EXTRA_LDFLAGS} -LIBPATH:../../../thirdparty/32/lib -LIBPATH:../../../../../../../bin/lib/Debug_Win32 -NODEFAULTLIB:libcmt"
+      EXTRA_CFLAGS="${EXTRA_CFLAGS} -I../../../thirdparty/32/include -I../../../../../zlib -I../../../../msvcInclude -MD"
+      if [ "${conf}" == "Debug" ]; then
+        EXTRA_CFLAGS="${EXTRA_CFLAGS}d"
+      else
+        OPTIONS="${OPTIONS} --disable-debug"
+      fi
+      EXTRA_LDFLAGS="${EXTRA_LDFLAGS} -LIBPATH:../../../thirdparty/32/lib -LIBPATH:../../../../../../../bin/lib/${conf}_Win32 -NODEFAULTLIB:libcmt"
       TOOLCHAIN="--toolchain=msvc"
     else
       OPTIONS="${OPTIONS} --cpu=i686 --target-os=mingw32"
@@ -187,7 +198,7 @@ configureAndBuild() {
   cd ${BASEDIR}
 }
 
-echo Building ffmpeg in ${COMPILER} ${arch} ${2} config...
+echo Building ffmpeg in ${COMPILER} ${arch} ${conf} config...
 
 make_dirs
 
