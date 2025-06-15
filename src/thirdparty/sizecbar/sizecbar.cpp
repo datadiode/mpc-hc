@@ -669,7 +669,7 @@ void CSizingControlBar::StartTracking(UINT nHitTest, CPoint point)
     GetWindowRect(rcBar);
     //mpc-hc custom code start
     // Convert to client coordinates to account for possible RTL layout
-    GetParent()->ScreenToClient(&rcBar);
+    GetParentFrame()->ScreenToClient(&rcBar);
     //mpc-hc custom code end
     GetEdgeRect(rcBar, m_htEdge, rcEdge);
     m_nTrackEdgeOfs = m_nTrackPosOld -
@@ -828,8 +828,11 @@ void CSizingControlBar::OnTrackInvertTracker()
     BOOL bHorz = IsHorzDocked();
     CRect rc, rcBar, rcDock, rcFrame;
     GetWindowRect(rcBar);
+    GetParentFrame()->ScreenToClient(&rcBar);
     m_pDockBar->GetWindowRect(rcDock);
+    GetParentFrame()->ScreenToClient(&rcDock);
     m_pDockSite->GetWindowRect(rcFrame);
+    GetParentFrame()->ScreenToClient(&rcFrame);
     VERIFY(GetEdgeRect(rcBar, m_htEdge, rc));
     if (!IsSideTracking())
         rc = bHorz ? 
@@ -840,10 +843,8 @@ void CSizingControlBar::OnTrackInvertTracker()
     int nOfs = m_nTrackPosOld - m_nTrackEdgeOfs;
     nOfs -= bHorzTracking ? rc.CenterPoint().x : rc.CenterPoint().y;
     rc.OffsetRect(bHorzTracking ? nOfs : 0, bHorzTracking ? 0 : nOfs);
-    rc.OffsetRect(-rcFrame.TopLeft());
 
-    CDC *pDC = m_pDockSite->GetDCEx(NULL,
-        DCX_WINDOW | DCX_CACHE | DCX_LOCKWINDOWUPDATE);
+    CDC *pDC = GetParentFrame()->GetDCEx(NULL, DCX_CACHE | DCX_LOCKWINDOWUPDATE);
     CBrush* pBrush = CDC::GetHalftoneBrush();
     CBrush* pBrushOld = pDC->SelectObject(pBrush);
 
