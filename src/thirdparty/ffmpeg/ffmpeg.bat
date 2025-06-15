@@ -37,7 +37,7 @@ IF NOT EXIST "%MPCHC_MSYS%"    GOTO MissingVar
 IF EXIST "%~dp0..\environments.bat" CALL "%~dp0..\environments.bat"
 
 :VarOk
-SET PATH=%MPCHC_MSYS%\usr\bin;%MPCHC_MINGW64%\bin;%PATH%
+SET PATH=%W64DEVKIT_HOME%\bin;%MPCHC_MSYS%\usr\bin;%MPCHC_MINGW64%\bin;%PATH%
 
 SET "BUILDTYPE=build"
 
