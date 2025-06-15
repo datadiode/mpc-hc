@@ -1391,6 +1391,7 @@
     <None Include="res\tickcross.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mpc-hc.rc">

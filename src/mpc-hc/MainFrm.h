@@ -177,6 +177,15 @@ struct FileFavorite {
     CString ToString() const;
 };
 
+struct GpsRecord {
+    double Latitude;
+    double Longitude;
+};
+
+struct GpsRecordTime : GpsRecord {
+    time_t Time;
+};
+
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame
 
@@ -439,6 +448,9 @@ private:
 
     CComPtr<ISubClock> m_pSubClock;
 
+    CAtlArray<GpsRecord> m_rgGpsRecord;
+    CAtlArray<GpsRecordTime> m_rgGpsRecordTime;
+
     bool m_fFrameSteppingActive;
     int m_nStepForwardCount;
     REFERENCE_TIME m_rtStepForwardStart;
@@ -602,6 +614,7 @@ protected:
     void ShowMediaTypesDialog();
 
     void OpenCreateGraphObject(OpenMediaData* pOMD);
+    void ExtractGpsRecords(LPCTSTR fn);
     void OpenFile(OpenFileData* pOFD);
     void OpenDVD(OpenDVDData* pODD);
     void OpenCapture(OpenDeviceData* pODD);

@@ -30,9 +30,13 @@
 #include "CMPCThemeInlineEdit.h"
 #include "YoutubeDL.h"
 #include "AppSettings.h"
+#include "WebView2EnvironmentOptions.h"
+#include "WebView2.h"
 
 
 class OpenMediaData;
+
+struct GpsRecord;
 
 class CMainFrame;
 
@@ -52,6 +56,18 @@ private:
     enum { COL_NAME, COL_TIME };
 
     CMainFrame* m_pMainFrame;
+
+    Microsoft::WRL::ComPtr<ICoreWebView2Environment> m_webViewEnvironment;
+    Microsoft::WRL::ComPtr<ICoreWebView2Controller> m_controller;
+    Microsoft::WRL::ComPtr<ICoreWebView2> m_webView;
+    EventRegistrationToken m_tokenNavigationCompleted;
+    CString m_url;
+    CStatic m_marker;
+
+    void InitializeWebView();
+    HRESULT OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment);
+    HRESULT OnCreateCoreWebView2ControllerCompleted(HRESULT result, ICoreWebView2Controller* controller);
+
     CMPCThemeInlineEdit m_edit;
     int inlineEditXpos;
 
@@ -131,6 +147,9 @@ public:
 
     bool IsHiddenDueToFullscreen() const;
     void SetHiddenDueToFullscreen(bool bHidenDueToFullscreen, bool returningFromFullScreen = false );
+
+    void Navigate();
+    void Navigate(const GpsRecord& rec);
 
     void LoadDuration(POSITION pos);
 

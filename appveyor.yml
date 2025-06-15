@@ -11,6 +11,7 @@ platform:
 
 environment:
   PATH: $(PATH);C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\msys64\opt\bin
+  MPCHC_WINSDK_VER: 10
   MPCHC_MSYS: C:\MSYS64
   MPCHC_MINGW32: C:\MSYS64\mingw32
   MPCHC_MINGW64: C:\MSYS64\mingw64
@@ -28,7 +29,11 @@ install:
 
 build_script:
   - update_version.bat
-  - msbuild mpc-hc.sln -t:build -restore -p:Configuration="%CONFIGURATION%" -p:Platform="%PLATFORM%"
+  - nuget restore -PackagesDirectory packages src\mpc-hc\packages.config
+  - wget -nv "https://exiftool.org/exiftool-13.30_%PLATFORM:~-2%.zip"
+  - msbuild mpc-hc.sln -t:build -p:Configuration="%CONFIGURATION%" -p:Platform="%PLATFORM%"
+  - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do tar -xf "exiftool-13.30_%PLATFORM:~-2%.zip" --strip-components=1 -C "%%d"
+  - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do ren "%%d\exiftool(-k).exe" "exiftool.exe"
   - cd bin
   - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do 7z a "%APPVEYOR_BUILD_FOLDER%\mpc-hc_%PLATFORM%_%CONFIGURATION%.7z" "%%d\*" "%APPVEYOR_BUILD_FOLDER%\distrib\%PLATFORM:Win32=x86%\D3D*.dll"
 

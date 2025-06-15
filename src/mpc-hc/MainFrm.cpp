@@ -2250,6 +2250,19 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
                 m_wndSeekBar.Enable(!g_bNoDuration);
                 m_wndSeekBar.SetRange(0, rtDur);
                 m_wndSeekBar.SetPos(rtNow);
+
+                if (m_wndPlaylistBar.IsVisible()) {
+                    size_t index = static_cast<size_t>(rtNow / 10000000LL);
+                    if (index < m_rgGpsRecordTime.GetCount()) {
+                        m_wndPlaylistBar.Navigate(m_rgGpsRecordTime[index]);
+                    }
+                    REFTIME afgTimePerFrame = GetAvgTimePerFrame();
+                    index = static_cast<size_t>(1E-7 * rtNow / afgTimePerFrame);
+                    if (index < m_rgGpsRecord.GetCount()) {
+                        m_wndPlaylistBar.Navigate(m_rgGpsRecord[index]);
+                    }
+                }
+
                 m_OSD.SetRange(rtDur);
                 m_OSD.SetPos(rtNow);
                 m_Lcd.SetMediaRange(0, rtDur);
@@ -2313,7 +2326,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
             break;
         case TIMER_STATS: {
             const CAppSettings& s = AfxGetAppSettings();
-            if (m_wndStatsBar.IsVisible()) {
+            if (m_wndStatsBar.IsVisible() || m_wndPlaylistBar.IsVisible()) {
                 CString rate;
                 rate.Format(_T("%.3fx"), m_dSpeedRate);
                 if (m_pQP) {
@@ -3260,6 +3273,7 @@ LRESULT CMainFrame::OnGraphNotify(WPARAM wParam, LPARAM lParam)
                 OnVideoSizeChanged(bWasAudioOnly);
                 m_statusbarVideoSize.Format(_T("%dx%d"), size.cx, size.cy);
                 UpdateDXVAStatus();
+                CheckSelectedVideoStream();
             }
             break;
             case EC_LENGTH_CHANGED: {
@@ -13480,6 +13494,151 @@ HRESULT CMainFrame::HandleMultipleEntryRar(CStringW fn) {
     return E_NOTIMPL; //not a multi-entry rar
 }
 
+/**
+ * @brief Run an external command line tool and optionally capture its output.
+ */
+HANDLE RunIt(LPCTSTR szExeFile, LPCTSTR szArgs, LPCTSTR szDir, HANDLE *phReadPipe, WORD wShowWindow)
+{
+    STARTUPINFO si;
+    ZeroMemory(&si, sizeof si);
+    si.cb = sizeof si;
+    si.dwFlags = STARTF_USESHOWWINDOW;
+    si.wShowWindow = wShowWindow;
+    BOOL bInheritHandles = FALSE;
+    if (phReadPipe != NULL)
+    {
+        SECURITY_ATTRIBUTES sa = { sizeof sa, NULL, TRUE };
+        if (!CreatePipe(phReadPipe, &si.hStdOutput, &sa, 0))
+            return NULL;
+        si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+        si.hStdError = si.hStdOutput;
+        bInheritHandles = TRUE;
+    }
+    PROCESS_INFORMATION pi;
+    if (CreateProcess(szExeFile, const_cast<LPTSTR>(szArgs), NULL, NULL,
+            bInheritHandles, CREATE_NEW_CONSOLE, NULL, szDir, &si, &pi))
+    {
+        CloseHandle(pi.hThread);
+    }
+    else
+    {
+        pi.hProcess = NULL;
+        if (phReadPipe != NULL)
+            CloseHandle(*phReadPipe);
+    }
+    if (phReadPipe != NULL)
+        CloseHandle(si.hStdOutput);
+    return pi.hProcess;
+}
+
+/**
+ * @brief Wrap ReadFile() to help read text line by line.
+ */
+class LineReader
+{
+    HANDLE const handle;
+    ULONG index;
+    ULONG ahead;
+    char chunk[256];
+public:
+    explicit LineReader(HANDLE handle)
+        : handle(handle), index(0), ahead(0)
+    {
+    }
+    std::string::size_type readLine(std::string& s)
+    {
+        s.resize(0);
+        do
+        {
+            std::string::size_type n = s.size();
+            s.resize(n + ahead);
+            char* lower = &s[n];
+            if (char* upper = (char*)_memccpy(lower, chunk + index, '\n', ahead))
+            {
+                n = static_cast<std::string::size_type>(upper - lower);
+                index += n;
+                ahead -= n;
+                s.resize(static_cast<std::string::size_type>(upper - s.c_str()));
+                break;
+            }
+            index = ahead = 0;
+        } while (ReadFile(handle, chunk, sizeof chunk, &ahead, nullptr) && ahead != 0);
+        return s.size();
+    }
+};
+
+void CMainFrame::ExtractGpsRecords(LPCTSTR fn)
+{
+    CString cmd;
+    HANDLE hReadPipe = nullptr;
+
+    // Clear any previously gathered GPS records.
+    m_rgGpsRecord.RemoveAll();
+    m_rgGpsRecordTime.RemoveAll();
+
+    // In first place, assume GPS records with timestamps.
+    // Be explicit on the date format to ensure absence of time zone indication
+    // like in .mp4 from https://github.com/immich-app/immich/discussions/17574.
+    cmd.Format(_T("exiftool.exe -a -G -ee -gps* -p \"${gpsdatetime;DateFmt('%%Y:%%m:%%d %%H:%%M:%%S')} $gpslatitude# $gpslongitude#\" \"%s\""), fn);
+
+    if (HANDLE hProcess = RunIt(_T("exiftool.exe"), cmd, nullptr, &hReadPipe, SW_HIDE))
+    {
+        LineReader reader(hReadPipe);
+        std::string s;
+        while (reader.readLine(s))
+        {
+            std::tm tm = { 0 };
+            GpsRecordTime rec = { 0 };
+            if (sscanf(s.c_str(), "%d:%d:%d %d:%d:%d %lf %lf",
+                &tm.tm_year, &tm.tm_mon, &tm.tm_mday,
+                &tm.tm_hour, &tm.tm_min, &tm.tm_sec,
+                &rec.Latitude, &rec.Longitude) == 8)
+            {
+                tm.tm_mon -= 1;
+                tm.tm_year -= 1900;
+                rec.Time = _mkgmtime(&tm);
+                const size_t index = static_cast<size_t>(m_rgGpsRecordTime.IsEmpty() ? 0 : difftime(rec.Time, m_rgGpsRecordTime[0].Time));
+                if (index < 86400) // i.e. one day
+                {
+                    m_rgGpsRecordTime.SetAtGrow(index, rec);
+                }
+            }
+        }
+        CloseHandle(hProcess);
+        CloseHandle(hReadPipe);
+    }
+
+    // If something was gathered then go with it.
+    if (!m_rgGpsRecordTime.IsEmpty())
+        return;
+
+    // Fall back to assuming GPS records without timestamps.
+    cmd.Format(_T("exiftool.exe -a -G -ee -gps* -p \"$gpslatitude# $gpslongitude#\" \"%s\""), fn);
+
+    if (HANDLE hProcess = RunIt(_T("exiftool.exe"), cmd, nullptr, &hReadPipe, SW_HIDE))
+    {
+        LineReader reader(hReadPipe);
+        std::string s;
+        while (reader.readLine(s))
+        {
+            OutputDebugStringA(s.c_str());
+            std::tm tm = { 0 };
+            GpsRecord rec = { 0 };
+            if (sscanf(s.c_str(), "%lf %lf",
+                &rec.Latitude, &rec.Longitude) == 2)
+            {
+                size_t index = m_rgGpsRecord.GetCount();
+                if (index < 8640000) // i.e. one day at 100fps
+                {
+                    m_rgGpsRecord.SetAtGrow(index, rec);
+                }
+            }
+        }
+        CloseHandle(hProcess);
+        CloseHandle(hReadPipe);
+    }
+}
+
 // Called from GraphThread
 void CMainFrame::OpenFile(OpenFileData* pOFD)
 {
@@ -13503,6 +13662,7 @@ void CMainFrame::OpenFile(OpenFileData* pOFD)
             // store info, this is used for skipping to next/previous file
             pOFD->title = fn;
             lastOpenFile = fn;
+            ExtractGpsRecords(fn);
         }
 
         CString ext = GetFileExt(fn);
@@ -16798,12 +16958,13 @@ void CMainFrame::SetupJumpToSubMenus(CMenu* parentMenu /*= nullptr*/, int iInser
     if (GetPlaybackMode() == PM_FILE) {
         if (m_MPLSPlaylist.size() > 1) {
             menuStartRadioSection();
+            CString pl_label = m_wndPlaylistBar.m_pl.GetHead().GetLabel();
             for (auto& Item : m_MPLSPlaylist) {
                 UINT flags = MF_BYCOMMAND | MF_STRING | MF_ENABLED;
                 CString time = _T("[") + ReftimeToString2(Item.Duration()) + _T("]");
                 CString name = PathUtils::StripPathOrUrl(Item.m_strFileName);
 
-                if (name == m_wndPlaylistBar.m_pl.GetHead().GetLabel()) {
+                if (!pl_label.IsEmpty() && name == pl_label) {
                     idSelected = id;
                 }
 
@@ -22368,6 +22529,8 @@ void CMainFrame::MediaTransportControlSetMedia() {
 }
 
 void CMainFrame::MediaTransportControlUpdateState(OAFilterState state) {
+    m_wndPlaylistBar.Navigate();
+
     if (m_media_trans_control.smtc_controls) {
         if (state == State_Running)      m_media_trans_control.smtc_controls->put_PlaybackStatus(ABI::Windows::Media::MediaPlaybackStatus_Playing);
         else if (state == State_Paused)  m_media_trans_control.smtc_controls->put_PlaybackStatus(ABI::Windows::Media::MediaPlaybackStatus_Paused);
