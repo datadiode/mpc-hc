@@ -2253,7 +2253,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 
                 if (m_wndPlaylistBar.IsVisible()) {
                     size_t index = static_cast<size_t>(rtNow / 10000000LL);
-                    if (index < m_rgGpsRecordTime.GetCount()) {
+                    if (index < m_rgGpsRecordTime.GetCount() && m_rgGpsRecordTime[index].Time) {
                         m_wndPlaylistBar.Navigate(m_rgGpsRecordTime[index]);
                     }
                     REFTIME afgTimePerFrame = GetAvgTimePerFrame();
