@@ -36,7 +36,7 @@ build_script:
   - msbuild mpc-hc.sln -t:build -p:Configuration="%CONFIGURATION%" -p:Platform="%PLATFORM%"
   - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do tar -xf "exiftool-13.30_%BITNESS%.zip" --strip-components=1 -C "%%d"
   - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do ren "%%d\exiftool(-k).exe" "exiftool.exe"
-  - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do tar -xf "LAVFilters-0.79.2-%PLATFORM:Win32=x86%.zip" -C "%%d\LAVFilters%BITNESS:32=%"
+  - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do 7z x "LAVFilters-0.79.2-%PLATFORM:Win32=x86%.zip" -o"%%d\LAVFilters%BITNESS:32=%"
   - cd bin
   - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do 7z a "%APPVEYOR_BUILD_FOLDER%\mpc-hc_%PLATFORM%_%CONFIGURATION%.7z" "%%d\*" "%APPVEYOR_BUILD_FOLDER%\distrib\%PLATFORM:Win32=x86%\D3D*.dll"
 
