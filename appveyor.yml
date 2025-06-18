@@ -30,10 +30,13 @@ install:
 build_script:
   - update_version.bat
   - nuget restore -PackagesDirectory packages src\mpc-hc\packages.config
-  - wget -nv "https://exiftool.org/exiftool-13.30_%PLATFORM:~-2%.zip"
+  - set BITNESS=%PLATFORM:~-2%
+  - wget -nv "https://exiftool.org/exiftool-13.30_%BITNESS%.zip"
+  - wget -nv "https://github.com/Nevcairiel/LAVFilters/releases/download/0.79.2/LAVFilters-0.79.2-%PLATFORM:Win32=x86%.zip"
   - msbuild mpc-hc.sln -t:build -p:Configuration="%CONFIGURATION%" -p:Platform="%PLATFORM%"
-  - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do tar -xf "exiftool-13.30_%PLATFORM:~-2%.zip" --strip-components=1 -C "%%d"
+  - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do tar -xf "exiftool-13.30_%BITNESS%.zip" --strip-components=1 -C "%%d"
   - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do ren "%%d\exiftool(-k).exe" "exiftool.exe"
+  - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do tar -xf "LAVFilters-0.79.2-%PLATFORM:Win32=x86%.zip" -C "%%d\LAVFilters%BITNESS:32=%"
   - cd bin
   - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do 7z a "%APPVEYOR_BUILD_FOLDER%\mpc-hc_%PLATFORM%_%CONFIGURATION%.7z" "%%d\*" "%APPVEYOR_BUILD_FOLDER%\distrib\%PLATFORM:Win32=x86%\D3D*.dll"
 
