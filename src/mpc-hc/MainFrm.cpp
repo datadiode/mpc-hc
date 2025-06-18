@@ -20,6 +20,7 @@
  */
 
 #include "stdafx.h"
+#include <fstream>
 #include "MainFrm.h"
 #include "mplayerc.h"
 #include "version.h"
@@ -13621,13 +13622,12 @@ void CMainFrame::ExtractGpsRecords(LPCTSTR fn)
         std::string s;
         while (reader.readLine(s))
         {
-            OutputDebugStringA(s.c_str());
             std::tm tm = { 0 };
             GpsRecord rec = { 0 };
             if (sscanf(s.c_str(), "%lf %lf",
                 &rec.Latitude, &rec.Longitude) == 2)
             {
-                size_t index = m_rgGpsRecord.GetCount();
+                const size_t index = m_rgGpsRecord.GetCount();
                 if (index < 8640000) // i.e. one day at 100fps
                 {
                     m_rgGpsRecord.SetAtGrow(index, rec);
@@ -13636,6 +13636,66 @@ void CMainFrame::ExtractGpsRecords(LPCTSTR fn)
         }
         CloseHandle(hProcess);
         CloseHandle(hReadPipe);
+    }
+
+    // If something was gathered then go with it.
+    if (!m_rgGpsRecord.IsEmpty())
+        return;
+
+    // Fall back to an accompanying .gpx file if such exists.
+    CPath path(fn);
+    path.RenameExtension(_T(".gpx"));
+
+    std::ifstream gpx(path);
+    GpsRecordTime rec = { 0 };
+    std::string line;
+    while (std::getline(gpx, line, '>') && !line.empty())
+    {
+        std::replace(line.begin(), line.end(), '"', '\'');
+        std::replace_if(line.begin(), line.end(), isspace, L' ');
+        // Unless tag is self-closing, restore the trailing angle bracket
+        if (line.back() != '/')
+            line.push_back('>');
+        if (line.find("<trkpt ") != std::wstring::npos)
+        {
+            sscanf(line.c_str() + line.find(" lat=") + 1, "lat='%lf'", &rec.Latitude);
+            sscanf(line.c_str() + line.find(" lon=") + 1, "lon='%lf'", &rec.Longitude);
+            // If tag is self-closing, synthesize an ending tag
+            if (line.back() == '/')
+                line = "</trkpt>";
+        }
+        else if (line.find("</time>") != std::wstring::npos)
+        {
+            std::tm tm = { 0 };
+            if (sscanf(line.c_str(), "%d-%d-%dT%d:%d:%d",
+                &tm.tm_year, &tm.tm_mon, &tm.tm_mday,
+                &tm.tm_hour, &tm.tm_min, &tm.tm_sec) == 6)
+            {
+                tm.tm_mon -= 1;
+                tm.tm_year -= 1900;
+                rec.Time = _mkgmtime(&tm);
+            }
+        }
+        // Handle ending tags which might have been synthesized in one of the above code paths
+        if (line.find("</trkpt>") != std::wstring::npos)
+        {
+            if (rec.Time)
+            {
+                const size_t index = static_cast<size_t>(m_rgGpsRecordTime.IsEmpty() ? 0 : difftime(rec.Time, m_rgGpsRecordTime[0].Time));
+                if (index < 86400) // i.e. one day
+                {
+                    m_rgGpsRecordTime.SetAtGrow(index, rec);
+                }
+            }
+            else
+            {
+                const size_t index = m_rgGpsRecord.GetCount();
+                if (index < 8640000) // i.e. one day at 100fps
+                {
+                    m_rgGpsRecord.SetAtGrow(index, rec);
+                }
+            }
+        }
     }
 }
 
