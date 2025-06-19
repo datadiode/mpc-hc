@@ -439,8 +439,8 @@ private:
 
     CComPtr<ISubClock> m_pSubClock;
 
-    CAtlArray<GpsRecord> m_rgGpsRecord;
-    CAtlArray<GpsRecordTime> m_rgGpsRecordTime;
+    CAtlArray<GpsRecord<>> m_rgGpsRecord;
+    CAtlArray<GpsRecordTime<>> m_rgGpsRecordTime;
 
     bool m_fFrameSteppingActive;
     int m_nStepForwardCount;

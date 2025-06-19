@@ -475,13 +475,21 @@ public:
     }
 };
 
+template<typename T = int32_t>
 struct GpsRecord {
-    double Latitude;
-    double Longitude;
+    T Latitude;
+    T Longitude;
+    GpsRecord(T Latitude = 0, T Longitude = 0)
+        : Latitude(Latitude), Longitude(Longitude)
+    { }
 };
 
-struct GpsRecordTime : GpsRecord {
+template<typename T = int32_t>
+struct GpsRecordTime : GpsRecord<T> {
     time_t Time;
+    GpsRecordTime(T Latitude = 0, T Longitude = 0, time_t Time = 0)
+        : GpsRecord(Latitude, Longitude), Time(Time)
+    { }
 };
 
 class CAppSettings
@@ -845,12 +853,12 @@ public:
     double          x5 = 1;
     double          x6 = 0;
 
-    double Latitude(const GpsRecord& rec) {
-        return x1 * rec.Latitude + x2 * rec.Longitude + x3;
+    double Latitude(const GpsRecord<>& rec) {
+        return x1 * 1E-6 * rec.Latitude + x2 * 1E-6 * rec.Longitude + x3;
     }
 
-    double Longitude(const GpsRecord& rec) {
-        return x4 * rec.Latitude + x5 * rec.Longitude + x6;
+    double Longitude(const GpsRecord<>& rec) {
+        return x4 * 1E-6 * rec.Latitude + x5 * 1E-6 * rec.Longitude + x6;
     }
 
     bool            bFastSeek;

@@ -234,7 +234,7 @@ void CPlayerPlaylistBar::Navigate()
     m_url.Empty();
 }
 
-void CPlayerPlaylistBar::Navigate(const GpsRecord& rec)
+void CPlayerPlaylistBar::Navigate(const GpsRecord<>& rec)
 {
     // Apply GPS correction as configured
     const double Latitude = AfxGetAppSettings().Latitude(rec);

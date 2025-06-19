@@ -36,8 +36,6 @@
 
 class OpenMediaData;
 
-struct GpsRecord;
-
 class CMainFrame;
 
 struct CueTrackMeta {
@@ -149,7 +147,7 @@ public:
     void SetHiddenDueToFullscreen(bool bHidenDueToFullscreen, bool returningFromFullScreen = false );
 
     void Navigate();
-    void Navigate(const GpsRecord& rec);
+    void Navigate(const GpsRecord<>& rec);
 
     void LoadDuration(POSITION pos);
 

@@ -13589,7 +13589,7 @@ void CMainFrame::ExtractGpsRecords(LPCTSTR fn)
         while (reader.readLine(s))
         {
             std::tm tm = { 0 };
-            GpsRecordTime rec = { 0 };
+            GpsRecordTime<double> rec = { 0 };
             if (sscanf(s.c_str(), "%d:%d:%d %d:%d:%d %lf %lf",
                 &tm.tm_year, &tm.tm_mon, &tm.tm_mday,
                 &tm.tm_hour, &tm.tm_min, &tm.tm_sec,
@@ -13601,7 +13601,7 @@ void CMainFrame::ExtractGpsRecords(LPCTSTR fn)
                 const size_t index = static_cast<size_t>(m_rgGpsRecordTime.IsEmpty() ? 0 : difftime(rec.Time, m_rgGpsRecordTime[0].Time));
                 if (index < 86400) // i.e. one day
                 {
-                    m_rgGpsRecordTime.SetAtGrow(index, rec);
+                    m_rgGpsRecordTime.SetAtGrow(index, { static_cast<int32_t>(1E6 * rec.Latitude), static_cast<int32_t>(1E6 * rec.Longitude), rec.Time });
                 }
             }
         }
@@ -13623,14 +13623,14 @@ void CMainFrame::ExtractGpsRecords(LPCTSTR fn)
         while (reader.readLine(s))
         {
             std::tm tm = { 0 };
-            GpsRecord rec = { 0 };
+            GpsRecord<double> rec;
             if (sscanf(s.c_str(), "%lf %lf",
                 &rec.Latitude, &rec.Longitude) == 2)
             {
                 const size_t index = m_rgGpsRecord.GetCount();
                 if (index < 8640000) // i.e. one day at 100fps
                 {
-                    m_rgGpsRecord.SetAtGrow(index, rec);
+                    m_rgGpsRecord.SetAtGrow(index, { static_cast<int32_t>(1E6 * rec.Latitude), static_cast<int32_t>(1E6 * rec.Longitude) });
                 }
             }
         }
@@ -13647,7 +13647,7 @@ void CMainFrame::ExtractGpsRecords(LPCTSTR fn)
     path.RenameExtension(_T(".gpx"));
 
     std::ifstream gpx(path);
-    GpsRecordTime rec = { 0 };
+    GpsRecordTime<double> rec;
     std::string line;
     while (std::getline(gpx, line, '>') && !line.empty())
     {
@@ -13684,7 +13684,7 @@ void CMainFrame::ExtractGpsRecords(LPCTSTR fn)
                 const size_t index = static_cast<size_t>(m_rgGpsRecordTime.IsEmpty() ? 0 : difftime(rec.Time, m_rgGpsRecordTime[0].Time));
                 if (index < 86400) // i.e. one day
                 {
-                    m_rgGpsRecordTime.SetAtGrow(index, rec);
+                    m_rgGpsRecordTime.SetAtGrow(index, { static_cast<int32_t>(1E6 * rec.Latitude), static_cast<int32_t>(1E6 * rec.Longitude), rec.Time });
                 }
             }
             else
@@ -13692,7 +13692,7 @@ void CMainFrame::ExtractGpsRecords(LPCTSTR fn)
                 const size_t index = m_rgGpsRecord.GetCount();
                 if (index < 8640000) // i.e. one day at 100fps
                 {
-                    m_rgGpsRecord.SetAtGrow(index, rec);
+                    m_rgGpsRecord.SetAtGrow(index, { static_cast<int32_t>(1E6 * rec.Latitude), static_cast<int32_t>(1E6 * rec.Longitude) });
                 }
             }
         }
