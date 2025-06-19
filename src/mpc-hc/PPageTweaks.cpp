@@ -24,6 +24,7 @@
 #include "mplayerc.h"
 #include "PPageTweaks.h"
 #include "MainFrm.h"
+#include "SimpleIni.h"
 
 
 // CPPageTweaks dialog
@@ -155,6 +156,8 @@ BEGIN_MESSAGE_MAP(CPPageTweaks, CMPCThemePPageBase)
     ON_UPDATE_COMMAND_UI(IDC_COMBO4, OnUpdateFastSeek)
     ON_BN_CLICKED(IDC_BUTTON1, OnBnClickedButton1)
     ON_BN_CLICKED(IDC_BUTTON2, OnBnClickedButton2)
+    ON_BN_CLICKED(IDC_BUTTON3, OnBnClickedButton3)
+    ON_BN_CLICKED(IDC_BUTTON4, OnBnClickedButton4)
     ON_NOTIFY_EX(TTN_NEEDTEXT, 0, OnToolTipNotify)
 END_MESSAGE_MAP()
 
@@ -177,6 +180,49 @@ void CPPageTweaks::OnBnClickedButton1()
 }
 
 void CPPageTweaks::OnBnClickedButton2()
+{
+    CFileDialog dlg(TRUE, _T("ini"), _T("mpc-hc-gps.ini"), OFN_FILEMUSTEXIST, _T("*.ini|*.ini|"));
+    if (CMainFrame::DoFileDialogWithLastFolder(dlg, AfxGetAppSettings().lastGpsImportExportPath) == IDOK) {
+        CSimpleIni ini;
+        if (SI_Error err = ini.LoadFile(dlg.GetPathName()); err >= 0) {
+            m_x1 = ini.GetDoubleValue(_T("Settings"), _T("x1"), 1);
+            m_x2 = ini.GetDoubleValue(_T("Settings"), _T("x2"), 0);
+            m_x3 = ini.GetDoubleValue(_T("Settings"), _T("x3"), 0);
+            m_x4 = ini.GetDoubleValue(_T("Settings"), _T("x4"), 0);
+            m_x5 = ini.GetDoubleValue(_T("Settings"), _T("x5"), 1);
+            m_x6 = ini.GetDoubleValue(_T("Settings"), _T("x6"), 0);
+            UpdateData(FALSE);
+            SetModified();
+        } else {
+            CString msg;
+            msg.Format(_T("CSimpleIni::LoadFile() failed with error %d"), err);
+            AfxMessageBox(msg, MB_ICONSTOP);
+        }
+    }
+}
+
+void CPPageTweaks::OnBnClickedButton3()
+{
+    if (!UpdateData())
+        return;
+    CFileDialog dlg(FALSE, _T("ini"), _T("mpc-hc-gps.ini"), OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT, _T("*.ini|*.ini|"));
+    if (CMainFrame::DoFileDialogWithLastFolder(dlg, AfxGetAppSettings().lastGpsImportExportPath) == IDOK) {
+        CSimpleIni ini;
+        ini.SetDoubleValue(_T("Settings"), _T("x1"), m_x1);
+        ini.SetDoubleValue(_T("Settings"), _T("x2"), m_x2);
+        ini.SetDoubleValue(_T("Settings"), _T("x3"), m_x3);
+        ini.SetDoubleValue(_T("Settings"), _T("x4"), m_x4);
+        ini.SetDoubleValue(_T("Settings"), _T("x5"), m_x5);
+        ini.SetDoubleValue(_T("Settings"), _T("x6"), m_x6);
+        if (SI_Error err = ini.SaveFile(dlg.GetPathName()); err < 0) {
+            CString msg;
+            msg.Format(_T("CSimpleIni::SaveFile() failed with error %d"), err);
+            AfxMessageBox(msg, MB_ICONSTOP);
+        }
+    }
+}
+
+void CPPageTweaks::OnBnClickedButton4()
 {
     m_x1 = 1;
     m_x2 = 0;

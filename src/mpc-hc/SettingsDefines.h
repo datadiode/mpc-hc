@@ -399,6 +399,7 @@
 #define IDS_LAST_QUICKOPEN_PATH             _T("LastQuickOpenPath")
 #define IDS_LAST_FILESAVECOPY_PATH          _T("LastFileSaveCopyPath")
 #define IDS_LAST_FILEOPENDIR_PATH           _T("LastFileOpenDirPath")
+#define IDS_LAST_GPSIMPORTEXPORT_PATH       _T("LastGpsImportExportPath")
 #define IDS_EXTERNAL_PLAYLIST_PATH          _T("ExternalPlayListPath")
 
 // Mouse

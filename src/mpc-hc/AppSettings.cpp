@@ -1343,6 +1343,7 @@ void CAppSettings::SaveSettings(bool write_full_history /* = false */)
     pApp->WriteProfileString(IDS_R_SETTINGS, IDS_LAST_QUICKOPEN_PATH, lastQuickOpenPath);
     pApp->WriteProfileString(IDS_R_SETTINGS, IDS_LAST_FILESAVECOPY_PATH, lastFileSaveCopyPath);
     pApp->WriteProfileString(IDS_R_SETTINGS, IDS_LAST_FILEOPENDIR_PATH, lastFileOpenDirPath);
+    pApp->WriteProfileString(IDS_R_SETTINGS, IDS_LAST_GPSIMPORTEXPORT_PATH, lastGpsImportExportPath);
     pApp->WriteProfileString(IDS_R_SETTINGS, IDS_EXTERNAL_PLAYLIST_PATH, externalPlayListPath);
     
 
@@ -2278,6 +2279,7 @@ void CAppSettings::LoadSettings()
     lastQuickOpenPath = pApp->GetProfileString(IDS_R_SETTINGS, IDS_LAST_QUICKOPEN_PATH, L"");
     lastFileSaveCopyPath = pApp->GetProfileString(IDS_R_SETTINGS, IDS_LAST_FILESAVECOPY_PATH, L"");
     lastFileOpenDirPath = pApp->GetProfileString(IDS_R_SETTINGS, IDS_LAST_FILEOPENDIR_PATH, L"");
+    lastGpsImportExportPath = pApp->GetProfileString(IDS_R_SETTINGS, IDS_LAST_GPSIMPORTEXPORT_PATH, L"");
     externalPlayListPath = pApp->GetProfileString(IDS_R_SETTINGS, IDS_EXTERNAL_PLAYLIST_PATH, L"");
 
     iRedirectOpenToAppendThreshold = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_REDIRECT_OPEN_TO_APPEND_THRESHOLD, 1000);

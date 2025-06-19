@@ -1012,6 +1012,7 @@ public:
     CStringW lastQuickOpenPath;
     CStringW lastFileSaveCopyPath;
     CStringW lastFileOpenDirPath;
+    CStringW lastGpsImportExportPath;
     CStringW externalPlayListPath;
 
     int iRedirectOpenToAppendThreshold;
