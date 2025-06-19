@@ -475,6 +475,15 @@ public:
     }
 };
 
+struct GpsRecord {
+    double Latitude;
+    double Longitude;
+};
+
+struct GpsRecordTime : GpsRecord {
+    time_t Time;
+};
+
 class CAppSettings
 {
     bool bInitialized = false;
@@ -828,6 +837,22 @@ public:
     int             nJumpDistS;
     int             nJumpDistM;
     int             nJumpDistL;
+
+    double          x1 = 1;
+    double          x2 = 0;
+    double          x3 = 0;
+    double          x4 = 0;
+    double          x5 = 1;
+    double          x6 = 0;
+
+    double Latitude(const GpsRecord& rec) {
+        return x1 * rec.Latitude + x2 * rec.Longitude + x3;
+    }
+
+    double Longitude(const GpsRecord& rec) {
+        return x4 * rec.Latitude + x5 * rec.Longitude + x6;
+    }
+
     bool            bFastSeek;
     enum { FASTSEEK_LATEST_KEYFRAME, FASTSEEK_NEAREST_KEYFRAME } eFastSeekMethod;
     bool            fShowChapters;

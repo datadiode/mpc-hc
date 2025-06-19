@@ -177,15 +177,6 @@ struct FileFavorite {
     CString ToString() const;
 };
 
-struct GpsRecord {
-    double Latitude;
-    double Longitude;
-};
-
-struct GpsRecordTime : GpsRecord {
-    time_t Time;
-};
-
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame
 

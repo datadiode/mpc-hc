@@ -1187,6 +1187,13 @@ void CAppSettings::SaveSettings(bool write_full_history /* = false */)
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_JUMPDISTL, nJumpDistL);
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_LIMITWINDOWPROPORTIONS, fLimitWindowProportions);
 
+    pApp->WriteProfileString(IDS_R_SETTINGS, IDS_RS_X1, std::to_wstring(x1).c_str());
+    pApp->WriteProfileString(IDS_R_SETTINGS, IDS_RS_X2, std::to_wstring(x2).c_str());
+    pApp->WriteProfileString(IDS_R_SETTINGS, IDS_RS_X3, std::to_wstring(x3).c_str());
+    pApp->WriteProfileString(IDS_R_SETTINGS, IDS_RS_X4, std::to_wstring(x4).c_str());
+    pApp->WriteProfileString(IDS_R_SETTINGS, IDS_RS_X5, std::to_wstring(x5).c_str());
+    pApp->WriteProfileString(IDS_R_SETTINGS, IDS_RS_X6, std::to_wstring(x6).c_str());
+
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_LASTUSEDPAGE, nLastUsedPage);
 
     m_Formats.UpdateData(true);
@@ -2021,6 +2028,13 @@ void CAppSettings::LoadSettings()
     nJumpDistM = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_JUMPDISTM, DEFAULT_JUMPDISTANCE_2);
     nJumpDistL = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_JUMPDISTL, DEFAULT_JUMPDISTANCE_3);
     fLimitWindowProportions = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_LIMITWINDOWPROPORTIONS, FALSE);
+
+    x1 = _tcstod(pApp->GetProfileString(IDS_R_SETTINGS, IDS_RS_X1, _T("1")), nullptr);
+    x2 = _tcstod(pApp->GetProfileString(IDS_R_SETTINGS, IDS_RS_X2, _T("0")), nullptr);
+    x3 = _tcstod(pApp->GetProfileString(IDS_R_SETTINGS, IDS_RS_X3, _T("0")), nullptr);
+    x4 = _tcstod(pApp->GetProfileString(IDS_R_SETTINGS, IDS_RS_X4, _T("0")), nullptr);
+    x5 = _tcstod(pApp->GetProfileString(IDS_R_SETTINGS, IDS_RS_X5, _T("1")), nullptr);
+    x6 = _tcstod(pApp->GetProfileString(IDS_R_SETTINGS, IDS_RS_X6, _T("0")), nullptr);
 
     m_Formats.UpdateData(false);
 

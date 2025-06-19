@@ -24,6 +24,7 @@
 #include "CMPCThemePPageBase.h"
 #include "CMPCThemeComboBox.h"
 #include "CMPCThemeSpinButtonCtrl.h"
+#include "CMPCThemeStaticLink.h"
 
 // CPPageTweaks dialog
 
@@ -40,12 +41,19 @@ public:
     int m_nJumpDistS;
     int m_nJumpDistM;
     int m_nJumpDistL;
+    double m_x1;
+    double m_x2;
+    double m_x3;
+    double m_x4;
+    double m_x5;
+    double m_x6;
     BOOL m_fNotifySkype;
 
     BOOL m_fPreventMinimize;
     BOOL m_fUseSearchInFolder;
     BOOL m_bHideWindowedMousePointer;
     CMPCThemeComboBox m_FastSeekMethod;
+    CMPCThemeStaticLink m_MatrixCalcSluLink;
 
     BOOL m_fFastSeek;
     BOOL m_fLCDSupport;
@@ -61,4 +69,5 @@ public:
     afx_msg BOOL OnToolTipNotify(UINT id, NMHDR* pNMH, LRESULT* pResult);
     afx_msg void OnUpdateFastSeek(CCmdUI* pCmdUI);
     afx_msg void OnBnClickedButton1();
+    afx_msg void OnBnClickedButton2();
 };

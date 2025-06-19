@@ -236,11 +236,16 @@ void CPlayerPlaylistBar::Navigate()
 
 void CPlayerPlaylistBar::Navigate(const GpsRecord& rec)
 {
+    // Apply GPS correction as configured
+    const double Latitude = AfxGetAppSettings().Latitude(rec);
+    const double Longitude = AfxGetAppSettings().Longitude(rec);
+
+    // Navigate the OSD map to the given coordinates
     CString url;
     // Must avoid the query string here as it causes constant fade-in/fade-out.
     // This means the served page will lack a marker, hence the m_marker thing.
-    //url.Format(OSM_WEB_PAGE_URL L"?zoom=16&mlat=%f&mlon=%f", rec.Latitude, rec.Longitude);
-    url.Format(OSM_WEB_PAGE_URL L"#map=16/%f/%f", rec.Latitude, rec.Longitude);
+    //url.Format(OSM_WEB_PAGE_URL L"?zoom=16&mlat=%f&mlon=%f", Latitude, Longitude);
+    url.Format(OSM_WEB_PAGE_URL L"#map=16/%f/%f", Latitude, Longitude);
     if (m_url != url) {
         m_webView->Navigate(m_url = url);
     }
