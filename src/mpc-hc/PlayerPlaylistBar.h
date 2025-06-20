@@ -60,7 +60,6 @@ private:
     Microsoft::WRL::ComPtr<ICoreWebView2> m_webView;
     EventRegistrationToken m_tokenNavigationCompleted;
     CString m_url;
-    CStatic m_marker;
 
     void InitializeWebView();
     HRESULT OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment);

@@ -39,8 +39,45 @@
 
 #undef SubclassWindow
 
-#define OSM_WEB_PAGE_URL L"https://www.openstreetmap.org/"
-#define OSM_WEB_PAGE_HEADER_HEIGHT 55 // May need an update in case they change the layout
+#define HEREDOC(text) L#text
+
+static const WCHAR html[] = HEREDOC
+(
+    <head>
+    <style>
+    body { margin: 0px; background-color: silver; }
+    .olControlAttribution{ top: 5px; }
+    </style>
+    <script src="https://www.openlayers.org/api/OpenLayers.js"></script>
+    <script src="https://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+    <script>
+
+    const markers = new OpenLayers.Layer.Markers("Markers");
+    const EPSG4326 = new OpenLayers.Projection("EPSG:4326");
+
+    var map;
+
+    function init()
+    {
+        map = new OpenLayers.Map("map");
+        map.addLayer(new OpenLayers.Layer.OSM());
+    }
+
+    function follow(lat, lon, zoom)
+    {
+        const lonlat = new OpenLayers.LonLat(lon, lat).transform(EPSG4326, map.getProjectionObject());
+        markers.clearMarkers();
+        markers.addMarker(new OpenLayers.Marker(lonlat));
+        map.addLayer(markers);
+        map.setCenter(lonlat, zoom);
+    }
+
+    </script>
+    </head>
+    <body onload="init()">
+    <div id="map"></div>
+    </body>
+);
 
 IMPLEMENT_DYNAMIC(CPlayerPlaylistBar, CMPCThemePlayerBar)
 CPlayerPlaylistBar::CPlayerPlaylistBar(CMainFrame* pMainFrame)
@@ -97,10 +134,6 @@ BOOL CPlayerPlaylistBar::Create(CWnd* pParentWnd, UINT defDockBarID)
 
     m_dropTarget.Register(this);
 
-    // Marker to be centered over OpenStreetMap's content area
-    m_marker.Create(nullptr, SS_OWNERDRAW | WS_VISIBLE | WS_DISABLED, CRect(0, 0, 12, 12), this, IDC_PLAYLIST);
-    m_marker.SetWindowRgn(CreateEllipticRgn(0, 0, 12, 12), TRUE);
-
 	createdWindow = true;
 
     return TRUE;
@@ -128,7 +161,7 @@ HRESULT CPlayerPlaylistBar::OnCreateCoreWebView2ControllerCompleted(HRESULT resu
         if (!m_webView)
             return S_FALSE;
 
-        m_webView->Navigate(OSM_WEB_PAGE_URL);
+        m_webView->NavigateToString(html);
 
         ResizeListColumn();
     }
@@ -240,14 +273,11 @@ void CPlayerPlaylistBar::Navigate(const GpsRecord<>& rec)
     const double Latitude = AfxGetAppSettings().Latitude(rec);
     const double Longitude = AfxGetAppSettings().Longitude(rec);
 
-    // Navigate the OSD map to the given coordinates
+    // Navigate the OSM map to the given coordinates
     CString url;
-    // Must avoid the query string here as it causes constant fade-in/fade-out.
-    // This means the served page will lack a marker, hence the m_marker thing.
-    //url.Format(OSM_WEB_PAGE_URL L"?zoom=16&mlat=%f&mlon=%f", Latitude, Longitude);
-    url.Format(OSM_WEB_PAGE_URL L"#map=16/%f/%f", Latitude, Longitude);
+    url.Format(L"follow(%f, %f, %d)", Latitude, Longitude, 16);
     if (m_webView && m_url != url) {
-        m_webView->Navigate(m_url = url);
+        m_webView->ExecuteScript(m_url = url, nullptr);
     }
 }
 
@@ -1854,7 +1884,6 @@ void CPlayerPlaylistBar::ResizeListColumn()
         if (m_controller)
         {
             m_controller->put_Bounds(r);
-            m_marker.SetWindowPos(nullptr, r.right / 2 - 6, (r.bottom + OSM_WEB_PAGE_HEADER_HEIGHT) / 2 - 6, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
         }
         else if (!r.IsRectEmpty())
         {
@@ -2010,11 +2039,6 @@ void CPlayerPlaylistBar::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 void CPlayerPlaylistBar::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
     if (nIDCtl != IDC_PLAYLIST) {
-        return;
-    }
-
-    if (lpDrawItemStruct->CtlType == ODT_STATIC) {
-        CDC::FromHandle(lpDrawItemStruct->hDC)->FillSolidRect(&lpDrawItemStruct->rcItem, RGB(255, 0, 0));
         return;
     }
 
