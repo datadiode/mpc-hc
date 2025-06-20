@@ -246,7 +246,7 @@ void CPlayerPlaylistBar::Navigate(const GpsRecord<>& rec)
     // This means the served page will lack a marker, hence the m_marker thing.
     //url.Format(OSM_WEB_PAGE_URL L"?zoom=16&mlat=%f&mlon=%f", Latitude, Longitude);
     url.Format(OSM_WEB_PAGE_URL L"#map=16/%f/%f", Latitude, Longitude);
-    if (m_url != url) {
+    if (m_webView && m_url != url) {
         m_webView->Navigate(m_url = url);
     }
 }
