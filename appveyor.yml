@@ -39,7 +39,7 @@ build_script:
   - tar -xf "%APPVEYOR_BUILD_FOLDER%\exiftool-13.30_%BITNESS%.zip" --strip-components=1
   - ren exiftool(-k).exe exiftool.exe
   - 7z x "%APPVEYOR_BUILD_FOLDER%\LAVFilters-0.79.2-%PLATFORM:Win32=x86%.zip" -oLAVFilters%BITNESS:32=% COPYING *.dll *.ax *.manifest
-  - 7z a "%APPVEYOR_BUILD_FOLDER%\bin\%APPVEYOR_REPO_NAME:/=-%_%PLATFORM%_%CONFIGURATION%_v%VERSION%.7z" *.dll *.exe %CONFIGURATION:Debug=*%.pdb LAVFilters%BITNESS:32=% exiftool_files "%APPVEYOR_BUILD_FOLDER%\distrib\%PLATFORM:Win32=x86%\D3D*.dll"
+  - 7z a "%APPVEYOR_BUILD_FOLDER%\bin\%APPVEYOR_REPO_NAME:/=-%_%PLATFORM%_%CONFIGURATION%_v%VERSION%.7z" *.dll *.exe %CONFIGURATION:Debug=*%.pdb LAVFilters%BITNESS:32=% exiftool_files "%APPVEYOR_BUILD_FOLDER%\distrib\%PLATFORM:Win32=x86%\D3D*.dll" "%APPVEYOR_BUILD_FOLDER%\mpc-hc-gps-*.ini"
 
 artifacts:
   - path: bin/*.7z
