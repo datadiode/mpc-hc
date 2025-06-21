@@ -22,6 +22,7 @@ environment:
 
 clone_script:
   - git clone -q --recursive --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
+  - update_version.bat # must go before git checkout to pick up the branch name
   - git checkout -qf %APPVEYOR_REPO_COMMIT%
 
 install:
@@ -29,7 +30,6 @@ install:
 
 build_script:
   - for /f %%v IN ('git describe') do set VERSION=%%v
-  - update_version.bat
   - nuget restore -PackagesDirectory packages src\mpc-hc\packages.config
   - set BITNESS=%PLATFORM:~-2%
   - wget -nv "https://exiftool.org/exiftool-13.30_%BITNESS%.zip"
