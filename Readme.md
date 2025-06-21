@@ -1,4 +1,4 @@
-# Fork of Media Player Classic - Home Cinema with ability to replay GPS tracks in OSM
+# Media Player Classic - Home Cinema with GPS replay
 [![StandWithUkraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
 
 Media Player Classic - Home Cinema (MPC-HC) is a free and open-source video and audio player for Windows. MPC-HC is based on the original Guliverkli project and contains many additional features and bug fixes.
