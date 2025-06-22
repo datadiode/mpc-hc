@@ -15,6 +15,10 @@ The obtained values can then be entered under *Options* &rarr; *Tweaks* so the p
 
 ![mpc-hc-options-tweaks-page](https://github.com/user-attachments/assets/75135d06-70f7-4251-b953-c92be9fa1edd)
 
+Preview with reduced fps showing footage from [https://cycling.vangestel.online/](https://cycling.vangestel.online/indoor/videos/germany/rimberg-kronenberg/) licenced under [CC BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/):
+
+![mpc-hc-with-gps-replay](https://github.com/user-attachments/assets/83b531cd-8ccd-4e66-a1bd-0a2d145cedd3)
+
 # Media Player Classic - Home Cinema
 
 Media Player Classic - Home Cinema (MPC-HC) is a free and open-source video and audio player for Windows. MPC-HC is based on the original Guliverkli project and contains many additional features and bug fixes.
