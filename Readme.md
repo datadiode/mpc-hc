@@ -1,9 +1,17 @@
 # Media Player Classic - Home Cinema with GPS replay
 [![StandWithUkraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
 
-The motivation for this fork was experiences with a GPS-enabled dash cam which recorded consistently wrong coordinates, and the apparent lack of a player application with the ability to compensate for the error. The error turned out to be reversible through a simple linear coordinate transform. The required correction factors can be obtained by solving a linear equation system with 6 unknowns involving pairs of false and true GPS coordinates from 3 reference locations which describe a sufficiently large triangle within the region where the camera is operated. The obtained values can then be entered under *Options* &rarr; *Tweaks* so the player can use them during replay.
+The motivation for this fork was experiences with a GPS-enabled dash cam which recorded consistently wrong coordinates, and the apparent lack of a player application with the ability to compensate for the error. The error turned out to be reversible through a simple linear coordinate transform. The required correction factors can be obtained by solving a linear equation system with 6 unknowns involving pairs of false and true GPS coordinates from 3 reference locations which describe a sufficiently large triangle within the region where the camera is operated.
+
+My setup to acquire the reference coordinates with help of https://conota.app/:
 
 ![wrong-gps-coordinates](https://github.com/user-attachments/assets/35214b91-70b3-448e-a963-905c9cdc643d)
+
+The known pairs of false and true GPS coordinates would be inserted into https://matrixcalc.org/slu.html like so:
+
+![mpc-hc-system-of-equations-2](https://github.com/user-attachments/assets/bc788112-4b05-4818-8ed6-e70f24e06ce4)
+
+The obtained values can then be entered under *Options* &rarr; *Tweaks* so the player can use them during replay.
 
 ![mpc-hc-options-tweaks-page](https://github.com/user-attachments/assets/75135d06-70f7-4251-b953-c92be9fa1edd)
 
