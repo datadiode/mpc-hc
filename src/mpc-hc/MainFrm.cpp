@@ -115,6 +115,9 @@
 #include "stb/stb_image.h"
 #include "stb/stb_image_resize2.h"
 
+#include <NMEA0183/NMEA0183.H>
+#pragma comment(lib, "NMEA0183.lib")
+
 #include <dwmapi.h>
 #undef SubclassWindow
 
@@ -13695,6 +13698,76 @@ void CMainFrame::ExtractGpsRecords(LPCTSTR fn)
                     m_rgGpsRecord.SetAtGrow(index, { static_cast<int32_t>(1E6 * rec.Latitude), static_cast<int32_t>(1E6 * rec.Longitude) });
                 }
             }
+        }
+    }
+
+    // If something was gathered then go with it.
+    if (!m_rgGpsRecord.IsEmpty() || !m_rgGpsRecordTime.IsEmpty())
+        return;
+
+    // Fall back to an accompanying .nmea file if such exists.
+    path.RenameExtension(_T(".nmea"));
+
+    std::ifstream nmea(path);
+    NMEA0183 nmea0183;
+    while (!nmea.eof() && std::getline(nmea, line))
+    {
+        // Restore the line ending
+        nmea0183.SetSentence(line + "\r\n");
+        // Handle different types of NMEA0183 responses generically
+        auto handleResponse = [&](auto response)
+        {
+            rec.Time = response->Time > rec.Time ? response->Time : response->Time + 86400;
+            const double LatitudeMinutes = modf(1E-2 * response->Position.Latitude.Latitude, &rec.Latitude);
+            const double LongitudeMinutes = modf(1E-2 * response->Position.Longitude.Longitude, &rec.Longitude);
+            const int32_t LatitudeDirection = response->Position.Latitude.Northing == NORTHSOUTH::South ? -1 : 1;
+            const int32_t LongitudeDirection = response->Position.Longitude.Easting == EASTWEST::West ? -1 : 1;
+            const size_t index = static_cast<size_t>(m_rgGpsRecordTime.IsEmpty() ? 0 : difftime(rec.Time, m_rgGpsRecordTime[0].Time));
+            if (index < 86400) // i.e. one day
+            {
+                m_rgGpsRecordTime.SetAtGrow(index, {
+                    static_cast<int32_t>(1E6 * rec.Latitude + 1E8 / 60.0 * LatitudeMinutes) * LatitudeDirection,
+                    static_cast<int32_t>(1E6 * rec.Longitude + 1E8 / 60.0 * LongitudeMinutes) * LongitudeDirection,
+                    rec.Time });
+            }
+        };
+        // Parse the response and check for the supposedly possibly relevant types
+        auto response = nmea0183.Parse();
+        if (auto bec = dynamic_cast<const BEC *>(response))
+        {
+            handleResponse(bec);
+        }
+        else if (auto bwc = dynamic_cast<const BWC *>(response))
+        {
+            handleResponse(bwc);
+        }
+        else if (auto bwr = dynamic_cast<const BWR *>(response))
+        {
+            handleResponse(bwr);
+        }
+        else if (auto gga = dynamic_cast<const GGA *>(response))
+        {
+            handleResponse(gga);
+        }
+        else if (auto gll = dynamic_cast<const GLL *>(response))
+        {
+            handleResponse(gll);
+        }
+        else if (auto gxa = dynamic_cast<const GXA *>(response))
+        {
+            handleResponse(gxa);
+        }
+        else if (auto rmc = dynamic_cast<const RMC *>(response))
+        {
+            handleResponse(rmc);
+        }
+        else if (auto trf = dynamic_cast<const TRF *>(response))
+        {
+            handleResponse(trf);
+        }
+        else if (auto wpl = dynamic_cast<const WAYPOINT_LOCATION *>(response))
+        {
+            handleResponse(wpl);
         }
     }
 }
