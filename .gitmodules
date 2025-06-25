@@ -58,3 +58,6 @@
 [submodule "src/thirdparty/ResizableLib/ResizableLib"]
 	path = src/thirdparty/ResizableLib/ResizableLib
 	url = https://github.com/ppescher/resizablelib
+[submodule "distrib/QuickLook.LAVFilters"]
+	path = distrib/QuickLook.LAVFilters
+	url = https://github.com/QL-Win/QuickLook.LAVFilters
