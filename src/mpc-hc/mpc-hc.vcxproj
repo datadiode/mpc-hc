@@ -86,6 +86,8 @@
       <Command>
         xcopy /I /D "$(SolutionDir)distrib\$(PlatformShortName)\D3D*.dll" "$(TargetDir)"
         xcopy /I /D "$(SolutionDir)distrib\QuickLook.LAVFilters\lib\LAVFilters-$(PlatformShortName)" "$(TargetDir)$([System.String]::Copy('$(TargetName)').Replace('$(ProjectName)','LAVFilters'))"
+        xcopy /I /D "$(SolutionDir)src\mpc-hc\res\shaders\dx9\*.hlsl" "$(TargetDir)Shaders"
+        xcopy /I /D "$(SolutionDir)src\mpc-hc\res\shaders\dx11\*.hlsl" "$(TargetDir)Shaders11"
       </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
