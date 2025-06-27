@@ -38,12 +38,14 @@ build_script:
   - for /f %%v IN ('git describe') do set VERSION=%%v
   - nuget restore -PackagesDirectory packages src\mpc-hc\packages.config
   - set BITNESS=%PLATFORM:~-2%
-  - wget -nv "https://exiftool.org/exiftool-%VERSION_OF_EXIFTOOL%_%BITNESS%.zip"
   - wget -nv "https://mediaarea.net/download/binary/libmediainfo0/%VERSION_OF_MEDIAINFO%/MediaInfo_DLL_%VERSION_OF_MEDIAINFO%_Windows_%PLATFORM:Win32=i386%_WithoutInstaller.zip"
+  - wget -nv "https://github.com/Aleksoid1978/VideoRenderer/releases/download/0.9.9/MpcVideoRenderer-0.9.9.2400.zip"
+  - wget -nv "https://exiftool.org/exiftool-%VERSION_OF_EXIFTOOL%_%BITNESS%.zip"
   - msbuild mpc-hc.sln -t:build -p:Configuration="%CONFIGURATION%" -p:Platform="%PLATFORM%"
   - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do cd "%%d"
-  - tar -xf "%APPVEYOR_BUILD_FOLDER%\exiftool-%VERSION_OF_EXIFTOOL%_%BITNESS%.zip" --strip-components=1
   - tar -xf "%APPVEYOR_BUILD_FOLDER%\MediaInfo_DLL_%VERSION_OF_MEDIAINFO%_Windows_%PLATFORM:Win32=i386%_WithoutInstaller.zip" MediaInfo.dll
+  - tar -xf "%APPVEYOR_BUILD_FOLDER%\MpcVideoRenderer-0.9.9.2400.zip" -C MPCVR MpcVideoRenderer%BITNESS:32=%.ax
+  - tar -xf "%APPVEYOR_BUILD_FOLDER%\exiftool-%VERSION_OF_EXIFTOOL%_%BITNESS%.zip" --strip-components=1
   - ren exiftool(-k).exe exiftool.exe
   - 7z a "%APPVEYOR_BUILD_FOLDER%\bin\%APPVEYOR_REPO_NAME:/=-%_%PLATFORM%_%CONFIGURATION%_v%VERSION%.7z" *.dll *.exe %CONFIGURATION:Debug=*%.pdb Lang LAVFilters%BITNESS:32=% exiftool_files "%APPVEYOR_BUILD_FOLDER%\mpc-hc-gps-*.ini"
 
