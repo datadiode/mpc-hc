@@ -10,6 +10,8 @@ platform:
   - x64
 
 environment:
+  VERSION_OF_EXIFTOOL: 13.30
+  VERSION_OF_MEDIAINFO: 25.04
   PATH: $(PATH);C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\msys64\opt\bin
   MPCHC_WINSDK_VER: 10
   MPCHC_MSYS: C:\MSYS64
@@ -36,10 +38,12 @@ build_script:
   - for /f %%v IN ('git describe') do set VERSION=%%v
   - nuget restore -PackagesDirectory packages src\mpc-hc\packages.config
   - set BITNESS=%PLATFORM:~-2%
-  - wget -nv "https://exiftool.org/exiftool-13.30_%BITNESS%.zip"
+  - wget -nv "https://exiftool.org/exiftool-%VERSION_OF_EXIFTOOL%_%BITNESS%.zip"
+  - wget -nv "https://mediaarea.net/download/binary/libmediainfo0/%VERSION_OF_MEDIAINFO%/MediaInfo_DLL_%VERSION_OF_MEDIAINFO%_Windows_%PLATFORM:Win32=i386%_WithoutInstaller.zip"
   - msbuild mpc-hc.sln -t:build -p:Configuration="%CONFIGURATION%" -p:Platform="%PLATFORM%"
   - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do cd "%%d"
-  - tar -xf "%APPVEYOR_BUILD_FOLDER%\exiftool-13.30_%BITNESS%.zip" --strip-components=1
+  - tar -xf "%APPVEYOR_BUILD_FOLDER%\exiftool-%VERSION_OF_EXIFTOOL%_%BITNESS%.zip" --strip-components=1
+  - tar -xf "%APPVEYOR_BUILD_FOLDER%\MediaInfo_DLL_%VERSION_OF_MEDIAINFO%_Windows_%PLATFORM:Win32=i386%_WithoutInstaller.zip" MediaInfo.dll
   - ren exiftool(-k).exe exiftool.exe
   - 7z a "%APPVEYOR_BUILD_FOLDER%\bin\%APPVEYOR_REPO_NAME:/=-%_%PLATFORM%_%CONFIGURATION%_v%VERSION%.7z" *.dll *.exe %CONFIGURATION:Debug=*%.pdb Lang LAVFilters%BITNESS:32=% exiftool_files "%APPVEYOR_BUILD_FOLDER%\mpc-hc-gps-*.ini"
 
