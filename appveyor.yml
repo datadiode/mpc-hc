@@ -19,16 +19,20 @@ environment:
   MSYS2_PATH_TYPE: inherit
   MPCHC_GIT: C:\Program Files\Git
   MPCHC_PYTHON: C:\Python38-x64
+  PYTHONIOENCODING: UTF8
 
 clone_script:
+  - git config --global core.autocrlf false
   - git clone -q --recursive --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
   - update_version.bat # must go before git checkout to pick up the branch name
   - git checkout -qf %APPVEYOR_REPO_COMMIT%
 
 install:
+  - C:\Python38-x64\python.exe -m pip install polib
   - pacman -S --noconfirm --needed nasm yasm
 
 build_script:
+  - msbuild mpcresources.sln -t:build -p:Configuration="Release" -p:Platform="%PLATFORM%"
   - for /f %%v IN ('git describe') do set VERSION=%%v
   - nuget restore -PackagesDirectory packages src\mpc-hc\packages.config
   - set BITNESS=%PLATFORM:~-2%
@@ -37,7 +41,7 @@ build_script:
   - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do cd "%%d"
   - tar -xf "%APPVEYOR_BUILD_FOLDER%\exiftool-13.30_%BITNESS%.zip" --strip-components=1
   - ren exiftool(-k).exe exiftool.exe
-  - 7z a "%APPVEYOR_BUILD_FOLDER%\bin\%APPVEYOR_REPO_NAME:/=-%_%PLATFORM%_%CONFIGURATION%_v%VERSION%.7z" *.dll *.exe %CONFIGURATION:Debug=*%.pdb LAVFilters%BITNESS:32=% exiftool_files "%APPVEYOR_BUILD_FOLDER%\mpc-hc-gps-*.ini"
+  - 7z a "%APPVEYOR_BUILD_FOLDER%\bin\%APPVEYOR_REPO_NAME:/=-%_%PLATFORM%_%CONFIGURATION%_v%VERSION%.7z" *.dll *.exe %CONFIGURATION:Debug=*%.pdb Lang LAVFilters%BITNESS:32=% exiftool_files "%APPVEYOR_BUILD_FOLDER%\mpc-hc-gps-*.ini"
 
 artifacts:
   - path: bin/*.7z
