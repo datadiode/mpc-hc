@@ -655,6 +655,7 @@ static constexpr wmcmd_base default_wmcmds[] = {
     { ID_PANSCAN_ROTATEYP,         VK_NUMPAD4, FALT,              IDS_AG_PNS_ROTATEY_P },
     { ID_PANSCAN_ROTATEYM,         VK_NUMPAD6, FALT,              IDS_AG_PNS_ROTATEY_M },
     { ID_PANSCAN_ROTATEZP,         VK_NUMPAD1, FALT,              IDS_AG_PNS_ROTATEZ_P },
+    { ID_PANSCAN_ROTATEZP2,                  0, 0,                IDS_AG_PNS_ROTATEZ_P },
     { ID_PANSCAN_ROTATEZM,         VK_NUMPAD3, FALT,              IDS_AG_PNS_ROTATEZ_M },
     { ID_VOLUME_UP,                     VK_UP, 0,                 IDS_AG_VOLUME_UP,   0, wmcmd::WUP },
     { ID_VOLUME_DOWN,                 VK_DOWN, 0,                 IDS_AG_VOLUME_DOWN, 0, wmcmd::WDOWN },

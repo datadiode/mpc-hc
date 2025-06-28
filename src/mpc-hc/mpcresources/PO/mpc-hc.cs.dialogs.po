@@ -4,14 +4,14 @@
 # Translators:
 # MPC HC <adiposegithub@gmail.com>, 2020
 # Random Vandal <zettaboy@gmail.com>, 2020
-# Jindřich T, 2024
+# Jindřich T, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2024-11-08 22:23:47+0000\n"
+"POT-Creation-Date: 2025-04-05 10:29:28+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
-"Last-Translator: Jindřich T, 2024\n"
+"Last-Translator: Jindřich T, 2025\n"
 "Language-Team: Czech (https://app.transifex.com/mpchc/teams/106126/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -117,7 +117,7 @@ msgstr "vstupní kanály:"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_STATIC_CM3"
 msgid "Hold shift for immediate changes when clicking something"
-msgstr "Pokud při kliknutí myší podržíte Shift, změny se projeví okamžitě"
+msgstr "Podržte klávesu Shift pro okamžitou změnu při kliknutí na něco"
 
 msgctxt "IDD_GOTO_DLG_CAPTION"
 msgid "Go To..."
@@ -201,7 +201,7 @@ msgstr "O programu"
 
 msgctxt "IDD_ABOUTBOX_IDC_AUTHORS_LINK"
 msgid "Copyright 2002-2025 clsid2 and others"
-msgstr "Držitelé autorských práv 2002-2025 clsid2 a další"
+msgstr "Copyright 2002-2025 clsid2 a další"
 
 msgctxt "IDD_ABOUTBOX_IDC_STATIC"
 msgid ""
@@ -334,7 +334,7 @@ msgstr "Pamatovat si zvětšení Pan a Scan"
 
 msgctxt "IDD_PPAGEDVD_IDC_STATIC"
 msgid "\"Open DVD/BD\" behavior"
-msgstr "Chování funkce \"Otevřít DVD/BD\""
+msgstr "Chování funkce \"Otevřít DVD / BD\""
 
 msgctxt "IDD_PPAGEDVD_IDC_RADIO1"
 msgid "Prompt for location"
@@ -663,8 +663,8 @@ msgctxt "IDD_PPAGETWEAKS_IDC_CHECK6"
 msgid ""
 "Prevent minimizing the player when in fullscreen on a non default monitor"
 msgstr ""
-"Zabránit minimalizaci z celoobrazovkového režimu při běhu na nevýchozím "
-"monitoru"
+"Zabránit minimalizaci z celoobrazovkového režimu při běhu na nevýchozí "
+"obrazovce"
 
 msgctxt "IDD_PPAGETWEAKS_IDC_CHECK7"
 msgid ""
@@ -1096,7 +1096,7 @@ msgstr "Externí:"
 
 msgctxt "IDD_PPAGELOGO_IDC_CHECK1"
 msgid "Apply Monitor Color Profile"
-msgstr "Nastavit barevný profil monitoru"
+msgstr "Nastavit barevný profil obrazovky"
 
 msgctxt "IDD_PPAGELOGO_IDC_BUTTON2"
 msgid "Browse..."
@@ -1492,11 +1492,11 @@ msgstr "Po přehrání přejít do režimu zobrazení v okně"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_STATIC"
 msgid "Fullscreen monitor"
-msgstr "Monitor pro zobrazení na celou obrazovku:"
+msgstr "Celoobrazovkový režim"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_CHECK2"
 msgid "Use autochange fullscreen monitor mode"
-msgstr "Automatická změna režimu monitoru pro režim na celou obrazovku"
+msgstr "Automatická změna režimu obrazovky pro režim na celou obrazovku"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_BUTTON1"
 msgid "Add"

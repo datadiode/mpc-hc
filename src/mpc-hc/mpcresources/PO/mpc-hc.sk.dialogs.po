@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the MPC-HC package.
 # Translators:
 # MPC HC <adiposegithub@gmail.com>, 2020
-# Marián Hikaník <podnety@mojepreklady.net>, 2025
+# Marián Hikaník, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2024-11-08 22:23:47+0000\n"
+"POT-Creation-Date: 2025-04-05 10:29:28+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
-"Last-Translator: Marián Hikaník <podnety@mojepreklady.net>, 2025\n"
+"Last-Translator: Marián Hikaník, 2025\n"
 "Language-Team: Slovak (https://app.transifex.com/mpchc/teams/106126/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -108,7 +108,7 @@ msgstr "Zapnúť mapovanie kanálov používateľom"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_STATIC_CM1"
 msgid "Speaker configuration for"
-msgstr "Konfig. reproduktory na"
+msgstr "Konfigurácia reproduktorov pre"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_STATIC_CM2"
 msgid "input channels:"
@@ -116,7 +116,7 @@ msgstr "vstupné kanály:"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_STATIC_CM3"
 msgid "Hold shift for immediate changes when clicking something"
-msgstr "Ak chcete zmeny uplatniť okamžite po kliknutí, pridržte klávesu Shift"
+msgstr "Pri držaní klávesu Shift sa zmeny prejavia hneď po kliknutí"
 
 msgctxt "IDD_GOTO_DLG_CAPTION"
 msgid "Go To..."

@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the MPC-HC package.
 # Translators:
 # MPC HC <adiposegithub@gmail.com>, 2020
-# Marián Hikaník <podnety@mojepreklady.net>, 2024
+# Marián Hikaník, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2024-12-16 13:01:31+0000\n"
+"POT-Creation-Date: 2025-05-21 22:58:36+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
-"Last-Translator: Marián Hikaník <podnety@mojepreklady.net>, 2024\n"
+"Last-Translator: Marián Hikaník, 2025\n"
 "Language-Team: Slovak (https://app.transifex.com/mpchc/teams/106126/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1750,6 +1750,9 @@ msgid ""
 "This only logs a few very specific things, such as DVB scanning, subtitle search, and yt-dlp data parsing.\n"
 "Do not enable this during normal use!"
 msgstr ""
+"Aktivuje zaznamenávanie akcií do súboru (vyžaduje reštart).\n"
+"Zaznamená sa iba niekoľko veľmi špecifických vecí, ako napr. skenovanie DVB, vyhľadávanie titulkov a analyzovanie dát yt-dlp.\n"
+"Nezapínajte počas bežného používania!"
 
 msgctxt "IDS_TIMER_REMAINING_TIME"
 msgid "Remaining time"
@@ -4429,10 +4432,12 @@ msgid ""
 "Youtube-DL failed to launch. Make sure yt-dlp.exe or youtube-dl.exe is "
 "located in MPC-HC folder or in PATH."
 msgstr ""
+"Nepodarilo sa spustiť Youtube-DL. Uistite sa, že v priečinku programu MPC-"
+"HC, alebo na danej ceste, existuje súbor yt-dlp.exe alebo youtube-dl.exe"
 
 msgctxt "IDS_CONTROLS_YOUTUBEDL"
 msgid "Calling yt-dlp/youtube-dl..."
-msgstr ""
+msgstr "Volanie yt-dlp/youtube-dl..."
 
 msgctxt "IDS_VERTICAL_ALIGN_VIDEO_TOP"
 msgid "Align Top"
@@ -4502,6 +4507,11 @@ msgid ""
 "-f bestvideo+bestaudio\n"
 "-o \"C:\\downloads\\%(title)s.%(ext)s"
 msgstr ""
+"Parametre príkazového riadka pre sťahovanie (\"uloženie kópie\") pomocou yt-dlp.exe (alebo youtube-dl.exe)\n"
+"Príklady:\n"
+"-f best[height<=1080]\n"
+"-f bestvideo+bestaudio\n"
+"-o \"C:\\downloads\\%(title)s.%(ext)s"
 
 msgctxt "IDS_PPAGEADVANCED_SAVEIMAGE_POSITION"
 msgid "Include video position in filename"
@@ -4811,6 +4821,9 @@ msgid ""
 "Just the filename is enough in case it is located in same folder as MPC-HC.\n"
 "Leave empty to use default filename: yt-dlp.exe"
 msgstr ""
+"Úplná cesta k spustiteľnému súboru yt-dlp (alebo youtube-dl).\n"
+"Ak sa nachádza v rovnakom priečinku ako MPC-HC, postačuje len názov súboru.\n"
+"Ak ponecháte prázdne, použije sa predvolený názov súboru yt-dlp.exe"
 
 msgctxt "IDS_PPAGEADVANCED_YDL_SUBS_PREFERENCE"
 msgid ""

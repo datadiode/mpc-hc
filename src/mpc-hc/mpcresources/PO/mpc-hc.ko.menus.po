@@ -696,7 +696,7 @@ msgstr "작게(&D)"
 
 msgctxt "ID_VOLUME_MUTE"
 msgid "&Mute"
-msgstr "음소거(&M)"
+msgstr "음 소거(&M)"
 
 msgctxt "POPUP"
 msgid "Af&ter Playback"

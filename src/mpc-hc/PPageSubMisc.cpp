@@ -310,7 +310,7 @@ void CPPageSubMisc::OnItemChanged(NMHDR* pNMHDR, LRESULT* pResult)
 {
     LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
-    int provider_count = m_pSubtitlesProviders->Providers().size();
+    int provider_count = (int) m_pSubtitlesProviders->Providers().size();
     for (int i = 0; i < provider_count; i++) {
         if (pNMLV->iItem == i && pNMLV->uNewState == 8192) {
             auto& subprovider = *m_pSubtitlesProviders->Providers()[i].get();

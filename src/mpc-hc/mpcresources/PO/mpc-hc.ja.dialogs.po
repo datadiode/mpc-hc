@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2024-11-08 22:23:47+0000\n"
+"POT-Creation-Date: 2025-04-05 10:29:28+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
 "Last-Translator: ever_green, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/mpchc/teams/106126/ja/)\n"
@@ -110,15 +110,15 @@ msgstr "カスタム チャンネル マッピングを有効にする"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_STATIC_CM1"
 msgid "Speaker configuration for"
-msgstr ""
+msgstr "入力スピーカーの設定:"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_STATIC_CM2"
 msgid "input channels:"
-msgstr ""
+msgstr "チャンネル"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_STATIC_CM3"
 msgid "Hold shift for immediate changes when clicking something"
-msgstr ""
+msgstr "Shift キーを押したままクリックすると、即座に変更されます"
 
 msgctxt "IDD_GOTO_DLG_CAPTION"
 msgid "Go To..."
@@ -421,7 +421,7 @@ msgstr "再生"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_RADIO2"
 msgid "Repeat forever"
-msgstr "連続再生 (無限)"
+msgstr "繰り返し再生"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_STATIC1"
 msgid "time(s)"
@@ -429,7 +429,7 @@ msgstr "回"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_STATIC7"
 msgid "Repeat mode:"
-msgstr "連続再生モード:"
+msgstr "繰り返しモード:"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_STATIC"
 msgid "After Playback"

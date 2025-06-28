@@ -272,7 +272,7 @@ struct AutoChangeFullscreenMode {
     unsigned                    uDelay = 0u;
 };
 
-#define ACCEL_LIST_SIZE 201
+#define ACCEL_LIST_SIZE 202
 
 struct wmcmd_base : public ACCEL {
     BYTE mouse;
@@ -349,7 +349,11 @@ public:
     }
 
     CString GetName() const {
-        return ResStr(dwname);
+        CString n = ResStr(dwname);
+        if (cmd == ID_PANSCAN_ROTATEZP2) {
+            n.Replace(L"+", L"+2");
+        }
+        return n;
     }
 
     void Restore() {

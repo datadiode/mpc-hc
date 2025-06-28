@@ -5,14 +5,14 @@
 # MPC HC <adiposegithub@gmail.com>, 2020
 # Ali Kömesöğütlü <byzlo685@gmail.com>, 2020
 # Sinan H., 2024
-# Mücahid Aksel <mucahidaksel@gmail.com>, 2024
+# Mücahid Aksel <mucahidaksel@gmail.com>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2024-11-08 22:23:47+0000\n"
+"POT-Creation-Date: 2025-04-05 10:29:28+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
-"Last-Translator: Mücahid Aksel <mucahidaksel@gmail.com>, 2024\n"
+"Last-Translator: Mücahid Aksel <mucahidaksel@gmail.com>, 2025\n"
 "Language-Team: Turkish (https://app.transifex.com/mpchc/teams/106126/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -116,7 +116,7 @@ msgstr "Hoparlör yapılandırması"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_STATIC_CM2"
 msgid "input channels:"
-msgstr "giriş kanalı için:"
+msgstr "giriş kanalı:"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_STATIC_CM3"
 msgid "Hold shift for immediate changes when clicking something"

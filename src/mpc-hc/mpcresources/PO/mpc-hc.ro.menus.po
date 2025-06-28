@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2024-02-10 16:52:19+0000\n"
+"POT-Creation-Date: 2025-04-26 17:38:13+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
 "Last-Translator: Miloiu Andrei-Valentin, 2025\n"
 "Language-Team: Romanian (https://app.transifex.com/mpchc/teams/106126/ro/)\n"
@@ -33,7 +33,7 @@ msgstr "&Deschide un fișier/ un URL..."
 
 msgctxt "ID_FILE_OPENDVDBD"
 msgid "Open &DVD/BD..."
-msgstr "Deschidere &DVD-ul/BD-ul..."
+msgstr "Deschide &DVD-ul/BD-ul..."
 
 msgctxt "ID_FILE_OPENDEVICE"
 msgid "Open De&vice..."
@@ -101,7 +101,7 @@ msgstr "&Vizualizare"
 
 msgctxt "ID_VIEW_CAPTIONMENU"
 msgid "Caption&&Menu"
-msgstr "Titlul și meniul"
+msgstr "Meniu și subtitrări"
 
 msgctxt "ID_VIEW_SEEKER"
 msgid "See&k Bar"
@@ -405,7 +405,7 @@ msgstr "Atinge fereastra din exteri&or"
 
 msgctxt "POPUP"
 msgid "&Aspect Ratio"
-msgstr "Raport de &aspect"
+msgstr "Raportul de &aspect (AR-ul/RA-ul)"
 
 msgctxt "ID_ASPECTRATIO_DAR"
 msgid "&Default (DAR)"
@@ -614,7 +614,7 @@ msgstr "1,50 x"
 
 msgctxt "ID_PLAY_PLAYBACKRATE_175"
 msgid "1.75 x"
-msgstr ""
+msgstr "1.75 x"
 
 msgctxt "ID_PLAY_PLAYBACKRATE_200"
 msgid "2.00 x"
@@ -638,19 +638,19 @@ msgstr "8,00 x"
 
 msgctxt "ID_PLAY_PLAYBACKRATE_FPS23"
 msgid "23.976 fps"
-msgstr ""
+msgstr "23.976 fps (cadre pe secundă)"
 
 msgctxt "ID_PLAY_PLAYBACKRATE_FPS24"
 msgid "24 fps"
-msgstr "24 cps/fps"
+msgstr "24 fps (cadre pe secundă)"
 
 msgctxt "ID_PLAY_PLAYBACKRATE_FPS25"
 msgid "25 fps"
-msgstr "25 cps/fps"
+msgstr "25 fps (cadre pe secundă)"
 
 msgctxt "ID_PLAY_PLAYBACKRATE_FPS59"
 msgid "59.94 fps"
-msgstr ""
+msgstr "59.94 fps (cadre pe secundă)"
 
 msgctxt "ID_PLAY_DECRATE"
 msgid "&Decrease Rate"
@@ -670,7 +670,7 @@ msgstr "&Filtre"
 
 msgctxt "ID_SHADERS"
 msgid "S&haders"
-msgstr "&Nuanțatoare"
+msgstr "&Nuanțatoare (Shadere)"
 
 msgctxt "ID_AUDIOS"
 msgid "&Audio Track"
@@ -710,7 +710,7 @@ msgstr "&Nicio acțiune"
 
 msgctxt "ID_AFTERPLAYBACK_PLAYNEXT"
 msgid "Play &next file in the folder"
-msgstr "Redă &următorul fișier din dosar/folder"
+msgstr "Redă &următorul fișier din dosar (folder)"
 
 msgctxt "ID_AFTERPLAYBACK_MONITOROFF"
 msgid "Turn off the &monitor"

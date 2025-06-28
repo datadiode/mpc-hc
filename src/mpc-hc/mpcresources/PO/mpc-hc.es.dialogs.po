@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2024-11-08 22:23:47+0000\n"
+"POT-Creation-Date: 2025-04-05 10:29:28+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
 "Last-Translator: Alex Covarrubias, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/mpchc/teams/106126/es/)\n"

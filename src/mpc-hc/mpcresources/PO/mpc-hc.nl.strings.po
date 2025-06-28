@@ -5,13 +5,13 @@
 # MPC HC <adiposegithub@gmail.com>, 2020
 # Arne Bezuijen <transifex@arnage.nl>, 2021
 # xknat <321knat@gmail.com>, 2022
-# Renz Straatman <renz75@outlook.com>, 2023
+# Renz Straatman <renz75@outlook.com>, 2025
 # mark van tilburg <markvantilburg@gmail.com>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2024-12-16 13:01:31+0000\n"
+"POT-Creation-Date: 2025-05-21 22:58:36+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
 "Last-Translator: mark van tilburg <markvantilburg@gmail.com>, 2025\n"
 "Language-Team: Dutch (https://app.transifex.com/mpchc/teams/106126/nl/)\n"
@@ -409,19 +409,19 @@ msgstr "Afspeellijst"
 
 msgctxt "IDS_PPAGE_FS_CLN_ON_OFF"
 msgid "On/Off"
-msgstr "Aan / Uit"
+msgstr "Aan/uit"
 
 msgctxt "IDS_PPAGE_FS_CLN_FROM_FPS"
 msgid "From (FPS)"
-msgstr "Van (FPS)"
+msgstr "Van FPS"
 
 msgctxt "IDS_PPAGE_FS_CLN_TO_FPS"
 msgid "To (FPS)"
-msgstr "Tot (FPS)"
+msgstr "Tot FPS"
 
 msgctxt "IDS_PPAGE_FS_CLN_DISPLAY_MODE"
 msgid "Display mode (Hz)"
-msgstr "Weergavemodus (Hz)"
+msgstr "Resolutie"
 
 msgctxt "IDS_PPAGE_FS_DEFAULT"
 msgid "Default"
@@ -585,7 +585,7 @@ msgstr "Speler"
 
 msgctxt "IDD_PPAGEDVD"
 msgid "Playback::DVD"
-msgstr "Afspelen::DVD"
+msgstr "Afspelen::DVD en Blu-ray"
 
 msgctxt "IDD_PPAGESUBTITLES"
 msgid "Subtitles"
@@ -593,7 +593,7 @@ msgstr "Ondertiteling"
 
 msgctxt "IDD_PPAGEFORMATS"
 msgid "Player::Formats"
-msgstr "Speler::Formaten"
+msgstr "Speler::Bestandsformaten"
 
 msgctxt "IDD_PPAGETWEAKS"
 msgid "Tweaks"
@@ -747,7 +747,7 @@ msgstr "Video Mixing Renderer 7 (VMR-7)"
 
 msgctxt "IDD_PPAGEACCELTBL"
 msgid "Player::Keys"
-msgstr "Speler::Toetsen"
+msgstr "Speler::Toetsenbord"
 
 msgctxt "IDD_PPAGEMOUSE"
 msgid "Player::Mouse"
@@ -767,7 +767,7 @@ msgstr "Speler::Logo"
 
 msgctxt "IDD_PPAGETHEME"
 msgid "Player::User Interface"
-msgstr "Speler::Gebruikers Interface"
+msgstr "Speler::Interface"
 
 msgctxt "IDD_PPAGEOUTPUT"
 msgid "Playback::Output"
@@ -775,7 +775,7 @@ msgstr "Afspelen::Uitvoer"
 
 msgctxt "IDD_PPAGEWEBSERVER"
 msgid "Player::Web Interface"
-msgstr "Speler::Web interface"
+msgstr "Speler::Webinterface"
 
 msgctxt "IDD_FILEPROPDETAILS"
 msgid "Details"
@@ -1515,15 +1515,15 @@ msgstr "Bestand openen"
 
 msgctxt "IDS_AG_OPEN_DVD"
 msgid "Open DVD/BD"
-msgstr "DVD / BD openen"
+msgstr "Open DVD/BD"
 
 msgctxt "IDS_MAINFRM_POST_SHADERS_FAILED"
 msgid "Failed to set post-resize shaders"
-msgstr "Aanpassen post-resize shaders mislukt"
+msgstr "Instellen van pixelshaders vóór schaling mislukt"
 
 msgctxt "IDS_MAINFRM_BOTH_SHADERS_FAILED"
 msgid "Failed to set both pre-resize and post-resize shaders"
-msgstr "Aanpassen van zowel pre-resize als post-resize shaders mislukt."
+msgstr "Aanpassen van pixelshaders zowel vóór als na schaling mislukt"
 
 msgctxt "IDS_DEBUGSHADERS_FIRSTRUN_MSG"
 msgid ""
@@ -1535,14 +1535,14 @@ msgstr ""
 
 msgctxt "IDS_SHADER_DLL_ERR_0"
 msgid "Cannot load %s, pixel shaders will not work."
-msgstr "Kan %s niet laden, pixel shaders zullen niet werken."
+msgstr "Kan %s niet laden, pixelshaders zullen niet werken."
 
 msgctxt "IDS_SHADER_DLL_ERR_1"
 msgid ""
 "Cannot find necessary function entry points in %s, pixel shaders will not "
 "work."
 msgstr ""
-"Kan benodigde ingangspunten van %s niet vinden, pixel shaders zullen niet "
+"Kan benodigde ingangspunten van %s niet vinden, pixelshaders zullen niet "
 "werken."
 
 msgctxt "IDS_OSD_SHADERS_PRESET"
@@ -1750,6 +1750,9 @@ msgid ""
 "This only logs a few very specific things, such as DVB scanning, subtitle search, and yt-dlp data parsing.\n"
 "Do not enable this during normal use!"
 msgstr ""
+"Loggen naar bestand inschakelen (herstart noodzakelijk).\n"
+"Dit logt heel specifieke zaken zoals DVB scanning, ondertitel zoeken en yt-dlp data parsen.\n"
+"Schakel dit niet in bij \"normaal\" gebruik!"
 
 msgctxt "IDS_TIMER_REMAINING_TIME"
 msgid "Remaining time"
@@ -1930,7 +1933,7 @@ msgstr "Toon na zweven over bediening, verberg na:"
 
 msgctxt "IDS_MAINFRM_PRE_SHADERS_FAILED"
 msgid "Failed to set pre-resize shaders"
-msgstr "Instellen van pre-resize-shaders mislukt"
+msgstr "Instellen van pixelshaders vóór schaling mislukt"
 
 msgctxt "IDS_OSD_RS_FT_CORRECTION_ON"
 msgid "Frame Time Correction: On"
@@ -2124,19 +2127,19 @@ msgstr "Ondertiteling::Overige"
 
 msgctxt "IDS_VIEW_BORDERLESS"
 msgid "Hide &borders"
-msgstr "Verberg titelbalk..."
+msgstr "Titelbalk verbergen..."
 
 msgctxt "IDS_VIEW_FRAMEONLY"
 msgid "Fra&me Only"
-msgstr "Verberg vensterrand..."
+msgstr "Vensterrand verbergen..."
 
 msgctxt "IDS_VIEW_CAPTIONMENU"
 msgid "Sho&w Caption&&Menu"
-msgstr "Titelbalken en menu's weergeven..."
+msgstr "Alle menu's en randen weergeven..."
 
 msgctxt "IDS_VIEW_HIDEMENU"
 msgid "Hide &Menu"
-msgstr "Verberg menubalk..."
+msgstr "Menubalk verbergen..."
 
 msgctxt "IDD_PPAGEADVANCED"
 msgid "Advanced"
@@ -2769,7 +2772,7 @@ msgstr "Beeldverhouding: Standaard (DAR)"
 
 msgctxt "IDS_MAINFRM_70"
 msgid "Audio delay: %I64d ms"
-msgstr "Audio vertraging: %I64dms"
+msgstr "Audiovertraging: %I64dms"
 
 msgctxt "IDS_AG_CHAPTER"
 msgid "Chapter %d"
@@ -3649,11 +3652,11 @@ msgstr "D3D volledig scherm GUI ondersteuning: Uit"
 
 msgctxt "IDS_OSD_RS_10BIT_RBG_OUT_ON"
 msgid "10-bit RGB Output: On"
-msgstr "10-bit RGB uitvoer: Aan"
+msgstr "10-bit RGB: aan"
 
 msgctxt "IDS_OSD_RS_10BIT_RBG_OUT_OFF"
 msgid "10-bit RGB Output: Off"
-msgstr "10-bit RGB uitvoer: Uit"
+msgstr "10-bit RGB: uit"
 
 msgctxt "IDS_OSD_RS_10BIT_RBG_IN_ON"
 msgid "Force 10-bit RGB Input: On"
@@ -3665,19 +3668,19 @@ msgstr "Forceer 10-bit RGB invoer: Uit"
 
 msgctxt "IDS_OSD_RS_FULL_FP_PROCESS_ON"
 msgid "Full Floating Point Processing: On"
-msgstr "Volledig zwevendekommagetal uitvoering: Aan"
+msgstr "Volledige Floating Point-verwerking: aan"
 
 msgctxt "IDS_OSD_RS_FULL_FP_PROCESS_OFF"
 msgid "Full Floating Point Processing: Off"
-msgstr "Volledig zwevendekommagetal uitvoering: Uit"
+msgstr "Volledige Floating Point-verwerking: uit"
 
 msgctxt "IDS_OSD_RS_HALF_FP_PROCESS_ON"
 msgid "Half Floating Point Processing: On"
-msgstr "Halve zwevendekommagetal uitvoering: Aan"
+msgstr "Halve Floating Point-verwerking: aan"
 
 msgctxt "IDS_OSD_RS_HALF_FP_PROCESS_OFF"
 msgid "Half Floating Point Processing: Off"
-msgstr "Halve zwevendekommagetal uitvoering: Uit"
+msgstr "Halve Floating Point-verwerking: uit"
 
 msgctxt "IDS_BRIGHTNESS_DEC"
 msgid "Brightness decrease"
@@ -4164,7 +4167,7 @@ msgstr ""
 
 msgctxt "IDS_PPAGE_FS_CLN_AUDIO_DELAY"
 msgid "Audio Delay (ms)"
-msgstr "Audio vertraging (ms)"
+msgstr "Audiovertraging (ms)"
 
 msgctxt "IDS_PPAGEADVANCED_DEFAULTTOOLBARSIZE"
 msgid "Size in pixels of the default toolbar."
@@ -4430,10 +4433,12 @@ msgid ""
 "Youtube-DL failed to launch. Make sure yt-dlp.exe or youtube-dl.exe is "
 "located in MPC-HC folder or in PATH."
 msgstr ""
+"Youtube-DL kon niet starten. Zorg ervoor dat yt-dlp.exe of youtube-dl.exe in"
+" de map van MPC-HC staat of in PATH."
 
 msgctxt "IDS_CONTROLS_YOUTUBEDL"
 msgid "Calling yt-dlp/youtube-dl..."
-msgstr ""
+msgstr "Aanroepen van yt-dlp/youtube-dl..."
 
 msgctxt "IDS_VERTICAL_ALIGN_VIDEO_TOP"
 msgid "Align Top"
@@ -4503,6 +4508,11 @@ msgid ""
 "-f bestvideo+bestaudio\n"
 "-o \"C:\\downloads\\%(title)s.%(ext)s"
 msgstr ""
+"Opdrachtregelopties voor downloaden (\"kopie opslaan\") met yt-dlp.exe (of youtube-dl.exe)\n"
+"Voorbeelden:\n"
+"-f best[height<=1080]\n"
+"-f bestvideo+bestaudio\n"
+"-o \"C:\\downloads\\%(title)s.%(ext)s"
 
 msgctxt "IDS_PPAGEADVANCED_SAVEIMAGE_POSITION"
 msgid "Include video position in filename"
@@ -4683,9 +4693,8 @@ msgid ""
 "don't show a dragger at current position, but instead are filled from left "
 "to right."
 msgstr ""
-"Vereist donker thema. Indien ingeschakeld heeft de tijdlijn en de volume-"
-"indicator geen wijzer op de huidige positie, maar wordt deze opgevuld vanaf "
-"links naar rechts."
+"Vereist donker thema. Indien ingeschakeld wordt de tijdlijn opgevuld van "
+"links naar rechts, en zie je geen cursor."
 
 msgctxt "IDS_PPAGEADVANCED_MODERNSEEKBARHEIGHT"
 msgid "Modern seekbar height (at 96dpi, otherwise scaled)"
@@ -4710,27 +4719,27 @@ msgstr ""
 
 msgctxt "IDS_PRESIZE_SHADERS_ENABLED"
 msgid "Pre-Resize Pixel Shaders: on"
-msgstr "Pre-Resize Pixel Shaders: aan"
+msgstr "Pixelshaders vóór schaling: aan"
 
 msgctxt "IDS_PRESIZE_SHADERS_DISABLED"
 msgid "Pre-Resize Pixel Shaders: off"
-msgstr "Pre-Resize Pixel Shaders: uit"
+msgstr "Pixelshaders vóór schaling: uit"
 
 msgctxt "IDS_PRESIZE_SHADERS_TOGGLE"
 msgid "Enable Pre-Resize Pixel Shaders"
-msgstr "Pre-Resize Pixel Shaders inschakelen"
+msgstr "Pixelshaders vóór schaling inschakelen"
 
 msgctxt "IDS_POSTSIZE_SHADERS_ENABLED"
 msgid "Post-Resize Pixel Shaders: on"
-msgstr "Post-Resize Pixel Shaders: aan"
+msgstr "Pixelshaders na schaling: aan"
 
 msgctxt "IDS_POSTSIZE_SHADERS_DISABLED"
 msgid "Post-Resize Pixel Shaders: off"
-msgstr "Post-Resize Pixel Shaders: uit"
+msgstr "Pixelshaders na schaling: uit"
 
 msgctxt "IDS_POSTSIZE_SHADERS_TOGGLE"
 msgid "Enable Post-Resize Pixel Shaders"
-msgstr "Post-Resize Pixel Shaders inschakelen"
+msgstr "Pixelshaders na schaling inschakelen"
 
 msgctxt "IDS_PPAGEADVANCED_TIME_REFRESH_INTERVAL"
 msgid "Refresh interval (in milliseconds) of time in status bar"
@@ -4766,7 +4775,7 @@ msgstr "Toon de video-eigenschappen (codec en resolutie) in de statusbalk."
 
 msgctxt "IDS_PPAGEADVANCED_PAUSE_WHILE_DRAGGING_SEEKBAR"
 msgid "Pause playback while dragging the seekbar."
-msgstr "Afspelen pauzeren tijdens gebruik van zoekbalk"
+msgstr "Afspelen pauzeren tijdens gebruik van tijdlijn"
 
 msgctxt "IDS_PPAGEADVANCED_CONFIRM_FILE_DELETE"
 msgid "Show confirmation prompt before deleting file"
@@ -4813,6 +4822,9 @@ msgid ""
 "Just the filename is enough in case it is located in same folder as MPC-HC.\n"
 "Leave empty to use default filename: yt-dlp.exe"
 msgstr ""
+"Volledige pad van de yt-dlp (of youtube-dl) executable.\n"
+"Alleen de bestandsnaam is genoeg indien het in de MPC-HC map staat.\n"
+"Leeg laten om de standaard bestandsnaam te gebruiken:: yt-dlp.exe"
 
 msgctxt "IDS_PPAGEADVANCED_YDL_SUBS_PREFERENCE"
 msgid ""
