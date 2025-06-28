@@ -10,8 +10,9 @@ platform:
   - x64
 
 environment:
-  VERSION_OF_EXIFTOOL: 13.30
+  VERSION_OF_EXIFTOOL: 13.31
   VERSION_OF_MEDIAINFO: 25.04
+  VERSION_OF_MPCVIDEORENDERER: 0.9.9.2400
   PATH: $(PATH);C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\msys64\opt\bin
   MPCHC_WINSDK_VER: 10
   MPCHC_MSYS: C:\MSYS64
@@ -27,7 +28,8 @@ clone_script:
   - git config --global core.autocrlf false
   - git clone -q --recursive --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
   - update_version.bat # must go before git checkout to pick up the branch name
-  - git checkout -qf %APPVEYOR_REPO_COMMIT%
+  - git checkout -q %APPVEYOR_REPO_COMMIT%
+  - type build\version_rev.h
 
 install:
   - C:\Python38-x64\python.exe -m pip install polib
@@ -39,15 +41,15 @@ build_script:
   - nuget restore -PackagesDirectory packages src\mpc-hc\packages.config
   - set BITNESS=%PLATFORM:~-2%
   - wget -nv "https://mediaarea.net/download/binary/libmediainfo0/%VERSION_OF_MEDIAINFO%/MediaInfo_DLL_%VERSION_OF_MEDIAINFO%_Windows_%PLATFORM:Win32=i386%_WithoutInstaller.zip"
-  - wget -nv "https://github.com/Aleksoid1978/VideoRenderer/releases/download/0.9.9/MpcVideoRenderer-0.9.9.2400.zip"
+  - for %%v in (%VERSION_OF_MPCVIDEORENDERER%) do wget -nv "https://github.com/Aleksoid1978/VideoRenderer/releases/download/%%~nv/MpcVideoRenderer-%%v.zip"
   - wget -nv "https://exiftool.org/exiftool-%VERSION_OF_EXIFTOOL%_%BITNESS%.zip"
   - msbuild mpc-hc.sln -t:build -p:Configuration="%CONFIGURATION%" -p:Platform="%PLATFORM%"
   - for /d %%d in (%APPVEYOR_BUILD_FOLDER%\bin\mpc-hc_*) do cd "%%d"
   - tar -xf "%APPVEYOR_BUILD_FOLDER%\MediaInfo_DLL_%VERSION_OF_MEDIAINFO%_Windows_%PLATFORM:Win32=i386%_WithoutInstaller.zip" MediaInfo.dll
-  - tar -xf "%APPVEYOR_BUILD_FOLDER%\MpcVideoRenderer-0.9.9.2400.zip" -C MPCVR MpcVideoRenderer%BITNESS:32=%.ax
+  - 7z x "%APPVEYOR_BUILD_FOLDER%\MpcVideoRenderer-%VERSION_OF_MPCVIDEORENDERER%.zip" -oMPCVR MpcVideoRenderer%BITNESS:32=%.ax
   - tar -xf "%APPVEYOR_BUILD_FOLDER%\exiftool-%VERSION_OF_EXIFTOOL%_%BITNESS%.zip" --strip-components=1
   - ren exiftool(-k).exe exiftool.exe
-  - 7z a "%APPVEYOR_BUILD_FOLDER%\bin\%APPVEYOR_REPO_NAME:/=-%_%PLATFORM%_%CONFIGURATION%_v%VERSION%.7z" *.dll *.exe %CONFIGURATION:Debug=*%.pdb Lang LAVFilters%BITNESS:32=% exiftool_files "%APPVEYOR_BUILD_FOLDER%\mpc-hc-gps-*.ini"
+  - 7z a "%APPVEYOR_BUILD_FOLDER%\bin\%APPVEYOR_REPO_NAME:/=-%_%PLATFORM%_%CONFIGURATION%_v%VERSION%.7z" *.dll *.exe %CONFIGURATION:Debug=*%.pdb Lang LAVFilters%BITNESS:32=% MPCVR Shaders Shaders11 exiftool_files "%APPVEYOR_BUILD_FOLDER%\COPYING.txt" "%APPVEYOR_BUILD_FOLDER%\mpc-hc-gps-*.ini"
 
 artifacts:
   - path: bin/*.7z
