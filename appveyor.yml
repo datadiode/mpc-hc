@@ -27,12 +27,12 @@ environment:
 clone_script:
   - git config --global core.autocrlf false
   - git clone -q --recursive --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
-  - update_version.bat # must go before git checkout to pick up the branch name
-  - git checkout -q %APPVEYOR_REPO_COMMIT%
+  - git reset --hard %APPVEYOR_REPO_COMMIT%
+  - update_version.bat
   - type build\version_rev.h
 
 install:
-  - C:\Python38-x64\python.exe -m pip install polib
+  - '%MPCHC_PYTHON%\python.exe' -m pip install polib
   - pacman -S --noconfirm --needed nasm yasm
 
 build_script:
