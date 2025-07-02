@@ -5336,7 +5336,7 @@ void CMainFrame::OnDropFiles(CAtlList<CStringW>& slFiles, DROPEFFECT dropEffect)
             slFiles.RemoveAt(curpos);
             // try to load it
             if (onlysubs && canLoadSub) {
-                if (canLoadSubISR && LoadSubtitle(subfile, &subInput, False)) {
+                if (canLoadSubISR && LoadSubtitle(subfile, &subInput, false)) {
                     if (!subInputSelected.pSubStream) {
                         // first one
                         subInputSelected = subInput;

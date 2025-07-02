@@ -1095,7 +1095,7 @@ STDMETHODIMP CFGManager::RenderFile(LPCWSTR lpcwstrFileName, LPCWSTR lpcwstrPlay
 
             if (SUCCEEDED(hr = ConnectFilter(pBF, nullptr))) {
                 // insert null video renderer on next RenderFile call which is used for audio dubs
-                m_ignoreVideo = True;
+                m_ignoreVideo = true;
                 TRACE(_T("CFGManager::RenderFile complete\n"));
                 return hr;
             }
@@ -3045,7 +3045,7 @@ CFGManagerCapture::CFGManagerCapture(LPCTSTR pName, LPUNKNOWN pUnk, HWND hWnd)
         m_transform.AddTail(pFGF);
     }
 
-    m_bIsCapture = True;
+    m_bIsCapture = true;
 }
 
 //
